@@ -1,0 +1,79 @@
+
+Copyright(c) 2003 Nathan P Sharp
+
+This file is part of Ride Dammit!.
+
+Ride Dammit! is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+Ride Dammit! is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with My Image Home; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+INTRODUCTION
+
+Ride Dammit! is a web-based bicycle ride log which is designed to
+be simple and easy to use.  It provides basic functionality for a
+small group of riders including tracking of maximum/average type
+information for different terrains and locations.
+
+Project goals are:
+1) Very simple, intuitive user interface.  Easy for anyone to
+   enter in data
+2) Statistics for a group of casual riders.  This system is not
+   inteded to be a training system such as those commercially
+   available on the web, but rather a fun way for a small group of
+   riders to share their riding logs.
+3) Ability to track rides based on rider, location, bicycle, and
+   terrain as well as collect weather information and a ride
+   description, which may include photos.
+
+Ride Dammit! uses PHP/MySQL and is delivered entirely over the web.
+
+
+AUTHOR
+
+This project is maintained by Nathan P Sharp.  Comments, suggestions and
+bugs should probably go through sourceforge at:
+http://sourceforge.net/projects/ridedammit
+But may additionally be sent to nsharp@users.sourceforge.net
+
+INSTALLATION
+
+This project is still very new.  No installation scripts are available
+and documentation is skimpy, at best.  If you want to use this project
+and have troubles, drop me a line at the address above.  I'd be
+happy to help you and in the process you'll probably prod me into
+doing more documentation.
+
+To run Ride Dammit!, you need to do the following:
+1) Create a MySQL database and a user which has access to it.
+2) Create the initial SQL tables from the .sql file.  If you
+  were creating the database named "rideDB" on the local
+  computer with the username "fred":
+
+  msyql -u fred -p rideDB <RDcreateTables.sql
+
+3) Put the files under htdoc into a published directory on your
+  web server.  For added security, you can optionally move the
+  RD subdirectory to a PHP include location.
+4) Edit RD/RDbootstrap.php and enter in the appropriate database
+  connection information and base URL for your ride log.
+5) The "authorization code" to create a new rider is currently
+  hardcoded into newRider.php (as is the silly hint message).
+  You'll have to add users manually in the database, manually
+  fix the hardcoded values, or encourage me to correct that ;-)
+
+MISSING:
+ - A way to edit a location, bike, or user
+ - A way to view info about a location, bike, or user (except
+   what shows up in the normal ride views).
+ - Non-hardcoded "authorization codes" and hint messages.
