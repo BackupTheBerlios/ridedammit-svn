@@ -30,6 +30,7 @@ define(S_ENGLISH_TEMP,     "&deg;F");
 define(S_METRIC_TEMP,      "&deg;C");
 define(C_METRIC_TO_ENGLISH_DIST, 0.6213712);
 define(C_ENGLISH_TO_METRIC_DIST, 1.609344);
+define(C_MAX_SPEED,        100);
 define(S_PERSON,           "Rider");
 define(S_PERSONS,          "Riders");
 define(S_EVENT,            "Ride");

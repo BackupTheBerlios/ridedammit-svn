@@ -30,6 +30,7 @@ define(S_ENGLISH_TEMP,     "&deg;F");
 define(S_METRIC_TEMP,      "&deg;C");
 define(C_METRIC_TO_ENGLISH_DIST, 1.09361);
 define(C_ENGLISH_TO_METRIC_DIST, 0.9144);
+define(C_MAX_SPEED,        6000);
 define(S_PERSON,           "Swimmer");
 define(S_PERSONS,          "Swimmers");
 define(S_EVENT,            "Swim");

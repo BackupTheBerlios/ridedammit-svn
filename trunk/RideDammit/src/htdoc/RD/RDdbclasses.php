@@ -787,9 +787,17 @@ class RDride
          return "Invalid password";
       }
       //Allow for length w/o hours
-      if ( preg_match('/^[^:]*:[^:]*$/', $this->f_time) )
+      if ( preg_match('/^([^:]*):([^:]*)$/', $this->f_time, $matches) )
       {
-         $this->f_time = "00:".$this->f_time;
+         //Do a computation to try and decide if they
+         //left off hours or seconds.  Assume hours
+         //left off and see if average speed is reasonable
+         $seconds = $matches[2] + $matches[1]*60;
+         $avg = $this->f_distance*3600.0/$seconds;
+         if ( $avg > C_MAX_SPEED )
+            $this->f_time = $this->f_time.":00";
+         else
+            $this->f_time = "00:".$this->f_time;
       }
       return "";
    }
