@@ -63,7 +63,6 @@ if ( $HTTP_POST_VARS["submit"] )
       //New Bike, create it
       $newBike = new RDbike(DBConnect());
       $newBike->f_bike = unFixQuotes($HTTP_POST_VARS["newBike"]);
-      $newBike->f_computerSetting = (int)$HTTP_POST_VARS["computerSetting"];
       $newBike->f_riderID = $ride->f_riderID;
       $errMsg = $newBike->insertNew();
       $ride->f_bikeID = $newBike->f_bikeID;

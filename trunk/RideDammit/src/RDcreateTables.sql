@@ -8,11 +8,10 @@
 # Table structure for table 'bikes'
 #
 
-CREATE TABLE bikes (
+CREATE TABLE rides_bikes (
   bikeID int(11) NOT NULL auto_increment,
   bike varchar(100) NOT NULL default '',
   riderID int(11) NOT NULL default '0',
-  computerSetting int(11) default '0',
   PRIMARY KEY (bikeID)
 ) TYPE=MyISAM;
 
@@ -20,11 +19,11 @@ CREATE TABLE bikes (
 # Table structure for table 'locations'
 #
 
-CREATE TABLE locations (
+CREATE TABLE rides_locations (
   locationID int(11) NOT NULL auto_increment,
   location varchar(100) NOT NULL default '',
   description text NOT NULL,
-  type enum('Road','Trail','Offroad','Mixed') NOT NULL default 'Road',
+  type smallint NOT NULL default 0,
   PRIMARY KEY (locationID)
 ) TYPE=MyISAM;
 
@@ -32,7 +31,7 @@ CREATE TABLE locations (
 # Table structure for table 'riders'
 #
 
-CREATE TABLE riders (
+CREATE TABLE rides_riders (
   riderID int(11) NOT NULL auto_increment,
   firstName varchar(100) NOT NULL default '',
   lastName varchar(100) NOT NULL default '',
@@ -44,7 +43,7 @@ CREATE TABLE riders (
 # Table structure for table 'rides'
 #
 
-CREATE TABLE rides (
+CREATE TABLE rides_rides (
   rideID int(11) NOT NULL auto_increment,
   riderID int(11) NOT NULL default '0',
   date datetime NOT NULL default '0000-00-00 00:00:00',

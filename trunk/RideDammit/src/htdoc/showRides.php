@@ -37,6 +37,7 @@ $currentQuery = new RDquery($getVars);
 <TITLE><?php echo S_SITE_TITLE; ?></TITLE>
 <link rel="stylesheet" href="<?php echo $RD_baseURL ?>/default.css">
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<meta content="PHP, MySQL, free, open, source, RD, ridedammit, ride, dammit, bike, swimming, biking, riding, log, swim, run" name="keywords" />
 </HEAD>
 <?php
 include("templates/$RD_template/showRides.php");
