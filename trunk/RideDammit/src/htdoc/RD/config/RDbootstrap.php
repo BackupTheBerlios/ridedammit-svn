@@ -32,6 +32,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  $RD_template = "rides";
  //What strings and achievement includes to use.
  $RD_strings = "rides.en";
+ 
+ //The authorization passcode for generating new accounts
+ //Really all the software uses is $RD_authCodeMD5, so if
+ //you want the site to be slightly more secure, just fill
+ //that in and leave $RD_authCode empty.
+ $RD_authCode = "enterCodeHere";
+ $RD_authCodeMD5 = md5($RD_authCode);
+ //$RD_authCodeMD5 = "4F4b7a61c77a708358276be9ba4a4b88";
 
  //Database Base table name. Used so multiple sites can have the
  //same database

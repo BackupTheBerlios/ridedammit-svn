@@ -38,7 +38,7 @@ if ( $HTTP_POST_VARS["submit"] )
    $code = unFixQuotes($HTTP_POST_VARS["code"]);
 
    //Check for code word
-   if ( md5($code) != "06bb7a61c77a708358276be9bc4a4b62"  )
+   if ( md5($code) != $RD_authCodeMD5  )
    {
       $errMsg = "Invalid Code!  No permission to create an account.";
    }
@@ -71,87 +71,7 @@ if ( $HTTP_POST_VARS["submit"] )
   <meta http-equiv="content-type"
  content="text/html; charset=ISO-8859-1">
 </head>
-<body>
-<?php $pageTitle = "New ".S_PERSON; include("header.inc.html"); ?>
-<H1>Become a new <?php echo S_PERSON; ?></H1>
-<p>I welcome anyone that I know to use this site for logging your
-<?php echo S_EVENTS; ?>.  I threw it all together in evenings and so forth, so
-there are still some breakable stuff in here, be forewarned.
-Hope you enjoy it and let me know if you have any questions
-or suggestions!  If you don't know my middle name (which is
-the "authorization code" below), drop
-me a line and I'll be happy to let you in.</p>
 <?php
-if ( $errMsg )
-{
-   echo "<p class=\"errors\">Error: $errMsg</p>\n";
-}
-if ( $normMsg )
-{
-   echo "<p>".$normMsg."</p>\n";
-}
+include("templates/$RD_template/newRider.php");
 ?>
-<center>
-<form method="post" action="<?php
-   echo $HTTP_SERVER_VARS["PHP_SELF"].encodeGet($getVars) ?>">
-  <table class="tbEdit">
-   <tbody>
-      <tr>
-         <td class="tbEditHeader">First Name<br>
-         </td>
-         <td class="tbEditBody">
-            <input type="text" name="firstName"
-               size="50" maxlen="100" value="<?php
-                  echo str_replace("\"","&quot;",$rider->f_firstName)
-                  ?>">
-         </td>
-      </tr>
-      <tr>
-         <td class="tbEditHeader">Last Name<br>
-         </td>
-         <td class="tbEditBody">
-            <input type="text" name="lastName"
-               size="50" maxlen="100" value="<?php
-                  echo str_replace("\"","&quot;",$rider->f_lastName)
-                  ?>">
-         </td>
-      </tr>
-      <tr>
-         <td class="tbEditHeader">Password<br>
-         </td>
-         <td class="tbEditBody">
-            <input type="password" name="password"
-               size="20" maxlen="30">
-         </td>
-      </tr>
-      <tr>
-         <td class="tbEditHeader">Verify<br>
-         </td>
-         <td class="tbEditBody">
-            <input type="password" name="verify"
-               size="20" maxlen="30">
-         </td>
-      </tr>
-      <tr>
-         <td class="tbEditHeader">Authorization Code
-         </td>
-         <td class="tbEditBody">
-            <input type="password" name="code"
-               size="20" maxlen="30">
-         </td>
-      </tr>
-
-
-    </tbody>
-  </table>
-  <p class="tinyPrint">Hint: Authorization code is my middle name uncapitalized</p>
-  <input type="submit" name="submit" value="Submit">
-                     <br>
-                     </form>
-  </center>
-  <p>
-  <a href="../showRides.php<?php
-  echo encodeGet($getVars) ?>">Back to <?php echo S_EVENTS; ?></a>
-<?php include("footer.inc.html"); ?>
-</body>
 </html>

@@ -83,7 +83,7 @@ if ( $HTTP_POST_VARS["submit"] )
 
       if( $newRide )
       {
-         $errMsg = $ride->insertNew(unFixQuotes($HTTP_POST_VARS["password"]));
+         $errMsg = $ride->insertNew($fixedPassword);
          if ( ! $errMsg )
          {
             $getVars["rideID"] = $ride->f_rideID;
@@ -94,7 +94,7 @@ if ( $HTTP_POST_VARS["submit"] )
       else
       {
          $ride->f_rideID = $rideID;
-         $errMsg = $ride->update($password);
+         $errMsg = $ride->update($fixedPassword);
          if ( ! $errMsg )
          {
             $getVars["rideID"] = $ride->f_rideID;
