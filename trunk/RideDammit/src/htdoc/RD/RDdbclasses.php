@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require("RD/config/RDbootstrap.php");
 require("RD/QueryAPI.php");
+require("RD/config/RDstrings.".$RD_strings.".php");
 
 define(DB_RIDES, DB_TABLEBASE."_rides");
 define(DB_RIDERS, DB_TABLEBASE."_riders");
@@ -632,6 +633,27 @@ class RDbike
 }
 
 /*************************************************
+ * Convert location strings to numbers.  Should 
+ * be static methods of RDlocation, but you know
+ * PHP and classes...
+ ************************************************/
+function locationTypeToNumber($lt)
+{
+   global $RDlocationTypes;
+   //Let it default to the first type
+   return (int)array_search($lt, $RDlocationTypes);
+}
+
+function numberToLocationType($n)
+{
+   global $RDlocationTypes;
+   //NPS: Default to the first type
+   if ( $n < 0 || $n >= count($RDlocationTypes) )
+      return $RDlocationTypes[0];
+   return $RDlocationTypes[$n];
+}
+
+/*************************************************
  * Class which represents a location
  ************************************************/
 class RDlocation
@@ -664,8 +686,8 @@ class RDlocation
               " (location, description, type) ".
               " values(\"".addSlashes($this->f_location).
               "\", \"". addSlashes($this->f_description) .
-              "\", \"". addSlashes($this->f_type) .
-              "\" )");
+              "\", ". locationTypeToNumber($this->f_type) .
+              " )");
       $this->f_locationID = mysql_insert_id();
    }
 
@@ -707,10 +729,10 @@ class RDlocation
 
    function parseRow($result)
    {
-      $this->f_locationID = $result[locationID];
-      $this->f_location = $result[location];
-      $this->f_description = $result[description];
-      $this->f_type = $result[type];
+      $this->f_locationID = $result["locationID"];
+      $this->f_location = $result["location"];
+      $this->f_description = $result["description"];
+      $this->f_type = numberToLocationType($result["type"]);
    }
 }
 
@@ -992,7 +1014,7 @@ class RDride
       $this->f_locationID = $result[locationID];
       $this->f_locationID_location = $result[location];
       $this->f_locationID_description = $result[description];
-      $this->f_locationID_type = $result[type];
+      $this->f_locationID_type = numberToLocationType($result[type]);
       $this->f_temperature = $this->units->celsiusToSetting($result[temperature]);
       $this->f_wind = $result[wind];
       $this->f_sky = $result[sky];
@@ -1228,7 +1250,8 @@ class RDquery
          $newClause = new QueryBinaryOp(
               new QueryColumnRef(DB_LOCATIONS.".type"),
               "=",
-              new QueryStrLiteral($this->locationID));
+              new QueryIntLiteral(
+                     locationTypeToNumber($this->locationID)));
          $currentWhere = $this->_andOn($currentWhere, $newClause);
       }
       if ( $this->bikeID > 0 )

@@ -19,20 +19,21 @@ along with Ride Dammit!; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-define(S_SITE_TITLE,       "Swim Dammit!");
+define(S_SITE_TITLE,       "Ride Dammit!");
 define(S_ENGLISH_UNITS,    "English");
 define(S_METRIC_UNITS,     "Metric");
-define(S_ENGLISH_DISTANCE, "yd");
-define(S_METRIC_DISTANCE,  "m");
-define(S_ENGLISH_VELOCITY, "yd/h");
-define(S_METRIC_VELOCITY,  "m/h");
+define(S_ENGLISH_DISTANCE, "mi");
+define(S_METRIC_DISTANCE,  "km");
+define(S_ENGLISH_VELOCITY, "mph");
+define(S_METRIC_VELOCITY,  "km/h");
 define(S_ENGLISH_TEMP,     "&deg;F");
 define(S_METRIC_TEMP,      "&deg;C");
-define(C_METRIC_TO_ENGLISH_DIST, 1.09361);
-define(C_ENGLISH_TO_METRIC_DIST, 0.9144);
-define(S_PERSON,           "Swimmer");
-define(S_PERSONS,          "Swimmers");
-define(S_EVENT,            "Swim");
-define(S_EVENTS,           "Swims");
-
+define(C_METRIC_TO_ENGLISH_DIST, 0.6213712);
+define(C_ENGLISH_TO_METRIC_DIST, 1.609344);
+define(S_PERSON,           "Rider");
+define(S_PERSONS,          "Riders");
+define(S_EVENT,            "Ride");
+define(S_EVENTS,           "Rides");
+$RDlocationTypes = array(
+   "Road", "Trail", "Offroad", "Mixed");
 ?>

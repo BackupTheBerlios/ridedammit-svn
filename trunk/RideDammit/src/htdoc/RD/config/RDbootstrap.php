@@ -19,9 +19,6 @@ along with Ride Dammit!; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
- //Point PHP at the correct strings file for the language and
- //type of app you are setting up
- include("RD/RDstrings.rides.en.php");
  //Be sure to not end the base URL with a trailing slash
  $RD_baseURL = "http://myip.org/rides";
 
@@ -31,7 +28,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  //below
  $RD_dbName = "ridesDB";
 
+ //What template directory to use.
  $RD_template = "rides";
+ //What strings and achievement includes to use.
+ $RD_strings = "rides.en";
 
  //Database Base table name. Used so multiple sites can have the
  //same database

@@ -44,7 +44,7 @@ class RDdistanceClass
    }
 }
 
-include("RD/config/achievements.php");
+include("RD/config/RDachievements.".$RD_strings.".php");
 
 function getDistanceClass($dist)
 {
@@ -65,7 +65,7 @@ function getDistanceClass($dist)
       }
    }
    if ( $high < count($RDdistanceClasses) &&
-         $RDdistanceClasses[$high]->distance == $dist )
+         $RDdistanceClasses[$high]->distance <= $dist )
       return $RDdistaneClasses[$high];
    return $RDdistanceClasses[$low];
 }

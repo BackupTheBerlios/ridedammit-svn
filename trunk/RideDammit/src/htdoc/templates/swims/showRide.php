@@ -53,7 +53,9 @@ if ( $msg )
                  <td class="tbLogHeader">Location</td>
                      <td class="tbLogBody"><?php
                         echo "<img width='16' height='16' src=\"".
-                           $ride->f_locationID_type.".png\">&nbsp; ".
+                           "templates/".$RD_template."/loc".
+                           locationTypeToNumber($ride->f_locationID_type).
+                           ".png\">&nbsp; ".
                            fixFieldForHTML($ride->f_locationID_location,0).
                            " (".$ride->f_locationID_type.")" ?></td>
                  <td class="tbLogHeader">Avg Speed</td>

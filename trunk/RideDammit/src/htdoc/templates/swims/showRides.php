@@ -155,7 +155,9 @@ Show <?php echo S_EVENTS; ?> for:
                             $rides->f_riderID_lastName,0)."</TD>";
       echo "<TD class=\"tbLogBody\">".
            "<img width='16' height='16' src=\"".
-            $rides->f_locationID_type.".png\">&nbsp; ".
+            "templates/".$RD_template."/loc".
+            locationTypeToNumber($rides->f_locationID_type).
+            ".png\">&nbsp; ".
             fixFieldForHTML($rides->f_locationID_location,0)."</TD>";
       echo "<TD class=\"tbLogBody\">".
                number_format($rides->f_distance,2)."</TD>";

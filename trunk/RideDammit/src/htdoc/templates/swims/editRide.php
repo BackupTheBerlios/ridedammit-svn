@@ -130,13 +130,9 @@ if ( $normMsg )
                                 <td class="tbEditBody2">
 
 
-
-              <select name="newLocationType">
-              <option value="Road">Road</option>
-              <option value="Trail">Trail</option>
-              <option value="Offroad">Offroad</option>
-              <option value="Mixed">Mixed</option>
-              </select>
+              <?php
+                 echo drawSelect("newLocationType", $RDlocationTypes, "");
+              ?>
                               <br>
                               </td>
                               </tr>
