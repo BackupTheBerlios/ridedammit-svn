@@ -67,7 +67,7 @@ while ( $rides->parseNextRow($result) )
    $tmpGetVars["units"] = $units->unitsString();
    $tmpGetVars["rideID"] = $rides->f_rideID;
    $itemLink = "$RD_baseURL/showRide.php".encodeGet($tmpGetVars);
-   $title = $rides->getDatePart()." ".$rides->getTimePart().", ".
+   $title = $rides->f_riderID_firstName." - ".$rides->getDatePart().", ".
          number_format($units->metricToSetting(
          $rides->f_distance),2)." ".$units->distanceString().", ".
          fixFieldForHtml($rides->f_locationID_location, false);
