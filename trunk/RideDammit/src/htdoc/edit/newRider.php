@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright(c) 2003 Nathan P Sharp
+Copyright(c) 2003-2004 Nathan P Sharp
 
 This file is part of Ride Dammit!.
 
@@ -72,6 +72,7 @@ if ( $HTTP_POST_VARS["submit"] )
  content="text/html; charset=ISO-8859-1">
 </head>
 <body>
+<?php $pageTitle = "New Rider"; include("header.inc.html"); ?>
 <H1>Become a new rider</H1>
 <p>I welcome anyone that I know to use this site for logging your
 miles.  I threw it all together in evenings and so forth, so
@@ -151,6 +152,6 @@ if ( $normMsg )
   <p>
   <a href="../showRides.php<?php
   echo encodeGet($getVars) ?>">Back to rides</a>
-
+<?php include("footer.inc.html"); ?>
 </body>
 </html>

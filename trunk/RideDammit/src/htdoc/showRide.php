@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright(c) 2003 Nathan P Sharp
+Copyright(c) 2003-2004 Nathan P Sharp
 
 This file is part of Ride Dammit!.
 
@@ -28,12 +28,13 @@ $msg = $ride->getDB_id((int)$getVars[rideID]);
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Ride Details</title>
+  <title>Ride Dammit! Ride Details</title>
   <meta http-equiv="content-type"
  content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" href="<?php echo $RD_baseURL ?>/default.css">
 </head>
 <body>
+<?php $pageTitle = "Ride Details"; include("header.inc.html"); ?>
 <?php
 if ( $msg )
 {
@@ -117,6 +118,8 @@ if ( $msg )
 </center>
 <p>   <a href="edit/editRide.php<?php echo encodeGet($getVars) ?>">Edit this ride</a>    &nbsp;&nbsp;&nbsp;&nbsp;
       <a href="showRides.php<?php echo encodeGet($getVars) ?>">Back to rides</a> </p>
+
+<?php include("footer.inc.html"); ?>
 
 </body>
 </html>

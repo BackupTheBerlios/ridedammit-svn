@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright(c) 2003 Nathan P Sharp
+Copyright(c) 2003-2004 Nathan P Sharp
 
 This file is part of Ride Dammit!.
 
@@ -39,18 +39,15 @@ $currentQuery = new RDquery($getVars);
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 </HEAD>
 <BODY>
-<table border=0 cellpadding=0 cellspacing=0>
- <tr>
-  <td><img src="RideDammit.png" width="64" height="64"></td>
-  <td><H1>Ride Dammit! Ride Log</H1></td>
- </tr>
-</table>
+
+<?php $pageTitle="Ride Log"; include("header.inc.html"); ?>
+
 <p class="tinyPrint">You can
 <A HREF="edit/newRider.php<?php
  echo encodeGet($getVars);
  ?>">
-use this system</a>
-to keep track of your rides.</p>
+sign up here to use this system</a>
+to keep track of your own rides.</p>
 Show rides for:
 <FORM METHOD="GET" ACTION="<?php echo $HTTP_SERVER_VARS["PHP_SELF"] ?>">
 <INPUT TYPE="HIDDEN" NAME="units" VALUE="<?php echo $units->unitsString() ?>">
@@ -383,5 +380,6 @@ if ( $riderCount > 1 )
   ?>"><?php
    echo $opposite->unitsString() ?></a>
 </p>
+<?php include("footer.inc.html"); ?>
 </BODY>
 </HTML>

@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright(c) 2003 Nathan P Sharp
+Copyright(c) 2003-2004 Nathan P Sharp
 
 This file is part of Ride Dammit!.
 
@@ -143,22 +143,18 @@ $bikes = getAllObjects(new RDbike(DBConnect()));
 $locations = getAllObjects(new RDlocation(DBConnect()));
 $riders = getAllObjects(new RDrider(DBConnect(), $units));
 
+$pageTitle = $newRide?"New Ride":"Ride Edit";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Ride Dammit! <?php echo $newRide?"New Ride":"Ride Edit" ?></title>
+  <title>Ride Dammit! <?php echo $pageTitle; ?></title>
   <link rel="stylesheet" href="<?php echo $RD_baseURL ?>/default.css">
   <meta http-equiv="content-type"
  content="text/html; charset=ISO-8859-1">
 </head>
 <body>
-<table border=0 cellpadding=0 cellspacing=0>
- <tr>
-  <td><img src="../RideDammit.png" width="64" height="64"></td>
-  <td><H1>Ride Dammit! <?php echo $newRide?"New Ride":"Ride Edit" ?></H1></td>
- </tr>
-</table>
+<?php include("header.inc.html"); ?>
 <?php
 if ( $errMsg )
 {
@@ -423,5 +419,6 @@ if ( $normMsg )
      $getVars["riderID"] = $ride->f_riderID;
   echo encodeGet($getVars) ?>">Back to rides</a>
 
+<?php include("footer.inc.html"); ?>
 </body>
 </html>
