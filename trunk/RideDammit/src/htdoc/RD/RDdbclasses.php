@@ -441,6 +441,7 @@ class RDrider
                                         " max(rides.distance*3600/TIME_TO_SEC(rides.time)) as mAvgSpeed, ".
                " count(rides.rideID) as numRides ".
                " from riders left join rides on rides.riderID=riders.riderID ".
+               "   left join locations on rides.locationID=locations.locationID ".
                $whereClause.
                " group by riders.riderID order by riders.lastName, ".
                "   riders.firstName");
@@ -509,6 +510,11 @@ class RDbike
     ************************************************/
    function insertNew()
    {
+      if ( ! isset($this->f_bike) ||
+            strlen($this->f_bike)==0 )
+      {
+         return "Can't add bike, none specified.";
+      }
       normalQuery($this->conn,
               "insert into bikes (bike, computerSetting, riderID) ".
               " values(\"".addSlashes($this->f_bike).
@@ -596,6 +602,11 @@ class RDlocation
     ************************************************/
    function insertNew()
    {
+      if ( ! isset($this->f_location) ||
+            strlen($this->f_location) == 0 )
+      {
+         return "Can't add location, none specified.";
+      }
       normalQuery($this->conn,
               "insert into locations (location, description, type) ".
               " values(\"".addSlashes($this->f_location).
@@ -623,7 +634,7 @@ class RDlocation
    function queryAll()
    {
       $result = normalQuery($this->conn,
-            "select * from locations");
+            "select * from locations order by type, location");
       return $result;
    }
 
@@ -687,6 +698,26 @@ class RDride
       $this->conn = $conn;
       $this->units = $units;
    }
+   
+   /*************************************************
+    * Validates fields and check for access.  Pretty
+    * minimal right now...
+    ************************************************/
+   function _validateFields($password)
+   {
+      //Check Perms first
+      $rider = new RDrider($this->conn, $this->units);
+      if ( ! $rider->checkPerms($this->f_riderID, $password) )
+      {
+         return "Invalid password";
+      }
+      //Allow for length w/o hours
+      if ( preg_match('/^[^:]*:[^:]*$/', $this->f_time) )
+      {
+         $this->f_time = "00:".$this->f_time;
+      }
+      return "";
+   }
 
    /*************************************************
     * Inserts the current data as a new record.
@@ -696,11 +727,9 @@ class RDride
     ************************************************/
    function insertNew($password)
    {
-      //Check Perms first
-      $rider = new RDrider($this->conn, $this->units);
-      if ( ! $rider->checkPerms($this->f_riderID, $password) )
+      if ( $msg = $this->_validateFields($password) )
       {
-         return "Invalid password";
+         return $msg;
       }
       normalQuery($this->conn,
               "insert into rides ".
@@ -733,11 +762,9 @@ class RDride
     ************************************************/
    function update($password)
    {
-      //Check Perms first
-      $rider = new RDrider($this->conn, $this->units);
-      if ( ! $rider->checkPerms($this->f_riderID, $password) )
+      if ( $msg = $this->_validateFields($password) )
       {
-         return "Invalid password";
+         return $msg;
       }
       $result = normalQuery($this->conn,
              "update rides set ".
@@ -940,6 +967,10 @@ class RDride
 }
 
 
+define(UNIT_METRIC, 1);
+define(UNIT_ENGLISH, 0);
+define(UNIT_SMALLMETRIC, 2);
+
 /*************************************************
  * Class which represents the current units in
  * effect and utilities for converting and printing
@@ -947,42 +978,64 @@ class RDride
  ************************************************/
 class RDunits
 {
-   var $metric;
+   var $mode;
 
    /*************************************************
     * @param $setting if "metric" or 1, current units
     *         are in metric.  If "english" or 0, current
-    *         units are english.  All other input is
-    *         undefined.
+    *         units are english.  If "smallMetric" or 2,
+    *         units are smaller metric units (m instead
+    *         of km) All other input is undefined.
     ************************************************/
    function RDunits($setting)
    {
-      $this->metric = ! isset($setting) ||
-                        $setting=="metric" ||
-                        $setting==1;
+      if ( ! isset($setting) || $setting == "metric" ||
+            $setting == UNIT_METRIC || $setting == "" )
+      {
+         $this->mode = UNIT_METRIC;
+      }
+      elseif ( $setting == "smallMetric" ||
+                $setting == UNIT_SMALLMETRIC )
+      {
+         $this->mode = UNIT_SMALLMETRIC;
+      }
+      else
+      {
+         $this->mode = UNIT_ENGLISH;
+         //NPS: Yea, I hate not having an error for invalid
+         //input.
+      }
    }
 
    function kmToSetting($in)
    {
-      if ( ! $this->metric )
+      if ( $this->mode == UNIT_ENGLISH )
       {
          return $in * 0.6213712;
+      }
+      elseif ( $this->mode == UNIT_SMALLMETRIC )
+      {
+         return $in * 1000;
       }
       return $in;
    }
 
    function settingToKM($in)
    {
-      if ( ! $this->metric )
+      if ( $this->mode == UNIT_ENGLISH )
       {
          return $in * 1.609344;
+      }
+      elseif ( $this->mode == UNIT_SMALLMETRIC )
+      {
+         return $in / 1000;
       }
       return $in;
    }
 
    function celsiusToSetting($in)
    {
-      if ( ! $this->metric )
+      if ( $this->mode == UNIT_ENGLISH )
       {
          return (($in * 9/5)+32);
       }
@@ -991,7 +1044,7 @@ class RDunits
 
    function settingToCelsius($in)
    {
-      if ( ! $this->metric )
+      if ( $this->mode == UNIT_ENGLISH )
       {
          return (($in-32)*5/9);
       }
@@ -1000,37 +1053,71 @@ class RDunits
 
    function isMetric()
    {
-      return $this->metric;
+      return $this->mode == UNIT_METRIC;
    }
 
    function isEnglish()
    {
-      return ! $this->metric;
+      return $this->mode == UNIT_ENGLISH;
    }
 
    function unitsString()
    {
-      return ($this->metric)?"metric":"english";
+      switch ( $this->mode )
+      {
+      case UNIT_ENGLISH:
+         return "english";
+      case UNIT_METRIC:
+         return "metric";
+      case UNIT_SMALLMETRIC:
+         return "small metric";
+      }
    }
 
    function distanceString()
    {
-      return ($this->metric)?"km":"mi";
+      switch ( $this->mode )
+      {
+      case UNIT_ENGLISH:
+         return "mi";
+      case UNIT_METRIC:
+         return "km";
+      case UNIT_SMALLMETRIC:
+         return "m";
+      }
    }
 
    function velocityString()
    {
-      return ($this->metric)?"km/h":"mph";
+      switch ( $this->mode )
+      {
+      case UNIT_ENGLISH:
+         return "mph";
+      case UNIT_METRIC:
+         return "km/h";
+      case UNIT_SMALLMETRIC:
+         return "m/h";
+      }
    }
 
    function tempString()
    {
-      return ($this->metric)?"&deg;C":"&deg;F";
+      switch ( $this->mode )
+      {
+      case UNIT_ENGLISH:
+         return "&deg;F";
+      case UNIT_METRIC:
+      case UNIT_SMALLMETRIC:
+         return "&deg;C";
+      }
    }
 
+   /******
+    * deprecated
+    ******/
    function opposite()
    {
-      return new RDunits($this->isEnglish());
+      return new RDunits($this->isEnglish()?"metric":"english");
    }
 }
 
@@ -1049,7 +1136,7 @@ function explode_int($pattern, $string)
  * This class represents the current query specified by
  * the user and the ability to read it from GET vars
  * and to create a QueryObj which represents the Where
- * clause 
+ * clause
  *****************************************************/
 class RDquery
 {
@@ -1067,14 +1154,14 @@ class RDquery
    function RDQuery($getVars)
    {
       $this->riderID = (int)$getVars["riderID"];
-      $this->locationID = (int)$getVars["locID"];
+      $this->locationID = unFixQuotes($getVars["locID"]);
       $this->effort = $getVars["effort"];
       $this->bikeID = (int)$getVars["bikeID"];
       $this->beforeDate = unFixQuotes($getVars["beforeDate"]);
       $this->afterDate = unFixQuotes($getVars["afterDate"]);
    }
 
-   /** 
+   /**
     * Internal function to and together two where clauses
     */
    function _andOn($currentWhere, $newWhere)
@@ -1085,7 +1172,7 @@ class RDquery
          return $newWhere;
    }
 
-   /** 
+   /**
     * Builds a QueryObj which represents the current query.
     * If nothing is to be searched upon, returns NULL.
     * If a queryObj is passed in, the current query will
@@ -1102,12 +1189,20 @@ class RDquery
               new QueryIntLiteral($this->riderID));
          $currentWhere = $this->_andOn($currentWhere, $newClause);
       }
-      if ( $this->locationID > 0 )
+      if ( ((int)$this->locationID) > 0 )
       {
          $newClause = new QueryBinaryOp(
               new QueryColumnRef("rides.locationID"),
               "=",
-              new QueryIntLiteral($this->locationID));
+              new QueryIntLiteral((int)$this->locationID));
+         $currentWhere = $this->_andOn($currentWhere, $newClause);
+      }
+      elseif ( $this->locationID )
+      {
+         $newClause = new QueryBinaryOp(
+              new QueryColumnRef("locations.type"),
+              "=",
+              new QueryStrLiteral($this->locationID));
          $currentWhere = $this->_andOn($currentWhere, $newClause);
       }
       if ( $this->bikeID > 0 )

@@ -87,19 +87,28 @@ Show rides for:
 <SELECT NAME="locID">
 <?php
   echo "<OPTION VALUE='0' ";
-  if ( $currentQuery->locationID <= 0 )
-     echo "SELECTED";
   echo ">All Locations</OPTION>\n";
 
   $locs = new RDlocation(DBconnect());
   $results = $locs->queryAll();
+  $currType = "";
   while ( $locs->parseNextRow($results) )
   {
+     if ( $locs->f_type != $currType )
+     {
+        echo "<OPTION VALUE='$locs->f_type' ";
+        if ( $currentQuery->locationID == $locs->f_type )
+           echo "SELECTED";
+        echo ">";
+        echo fixFieldForTextArea("All ". $locs->f_type);
+        echo "</OPTION>\n";
+        $currType = $locs->f_type;
+     }
      echo "<OPTION VALUE='$locs->f_locationID' ";
      if ( $currentQuery->locationID == $locs->f_locationID )
         echo "SELECTED";
      echo ">";
-     echo fixFieldForTextArea(
+     echo fixFieldForTextArea(" - ".
                $locs->f_location);
      echo "</OPTION>\n";
   }
