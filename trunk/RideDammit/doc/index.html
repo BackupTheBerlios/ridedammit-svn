@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>Ride Dammit! Ride Log</title>
+  <link rel="stylesheet" href="default.css">
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+</head>
+<body>
+<table class="tbLog" border="0" cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td width="64" height="64" class="tbLogHeader"><img
+ src="RideDammit.png" width="64" height="64"></td>
+      <td style="vertical-align: middle;" class="tbLogHeader">
+      <h1>Ride Dammit! Ride Log</h1>
+      </td>
+    </tr>
+    <tr>
+      <td class="tbLogBody" colspan="2">
+      <h2>Introduction</h2>
+Ride Dammit! is a web-based bicycle ride log which is designed to be
+simple and easy to use. It provides basic functionality for a small
+group of riders including tracking of maximum/average type information
+for different terrains and locations.<br>
+      <br>
+Project goals are:<br>
+      <ol>
+        <li>Very simple, intuitive user interface. Easy for anyone to
+enter in data</li>
+        <li>Statistics for a group of casual riders. This system is not
+inteded to be a training system such as those commercially available on
+the web, but rather a fun way for a small group of riders to share
+their riding logs.</li>
+        <li>Ability to track rides based on rider, location, bicycle,
+and terrain as well as collect weather information and a ride
+description, which may include photos.</li>
+      </ol>
+Ride Dammit! uses PHP/MySQL and is delivered entirely over the
+web.&nbsp; Ride Dammit! uses the GNU Public License.<br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td class="tbLogBody2" colspan="2">
+      <h2>News</h2>
+      <ul>
+        <li>Oh, if I had more time, I'd come up with a groovy news item
+every month for you. As it is, just download it and try it out.</li>
+      </ul>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td class="tbLogBody" colspan="2">
+      <h2>Screen Shots and Sample Site</h2>
+      <p>Click on the thumbnails for larger images.</p>
+      <p>...<br>
+      </p>
+      <p><a href="http://www.northernneckcycling.org">Northern Neck
+Cycling</a> uses a <a
+ href="http://www.northernneckcycling.org/rides/showRides.php?units=english">mildly
+customized version of Ride Dammit!</a> to keep track of their rides.<br>
+      <br>
+      </p>
+      </td>
+    </tr>
+    <tr>
+      <td class="tbLogBody2" colspan="2">
+      <h2>Installation</h2>
+This project is still very new. No installation scripts are available
+and documentation is skimpy, at best. If you want to use this project
+and have troubles, drop me a line at the address above. I'd be happy to
+help you and in the process you'll probably prod me into doing more
+documentation.&nbsp; That being said, there isn't much too it.<br>
+      <br>
+To run Ride Dammit!, you need to do the following:<br>
+      <ol>
+        <li>Create a MySQL database and a user which has access to it.</li>
+        <li>Create the initial SQL tables from the .sql file. If you
+were creating the database named "rideDB" on the local computer with
+the username "fred":<br>
+          <pre>msyql -u fred -p rideDB &lt;RDcreateTables.sql</pre>
+        </li>
+        <li>Put the files under htdoc into a published directory on
+your web server. For added security, you can optionally move the RD
+subdirectory to a PHP include location.</li>
+        <li>Edit RD/RDbootstrap.php and enter in the appropriate
+database connection information and base URL for your ride log. </li>
+        <li>The "authorization code" to create a new rider is currently
+hardcoded into newRider.php (as is the silly hint message).&nbsp;
+You'll have to add users manually in the database, manually fix the
+hardcoded values, or encourage me to correct that ;-)</li>
+      </ol>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td class="tbLogBody" colspan="2">
+      <h2>Author/Bugs/More Info<br>
+      </h2>
+This project is maintained by Nathan P Sharp. Comments, suggestions and
+bugs should probably go through sourceforge at:<br>
+      <br>
+      <a href="http://sourceforge.net/projects/ridedammit">http://sourceforge.net/projects/ridedammit</a><br>
+      <br>
+But may additionally be sent to <a
+ href="mailto:nsharp@users.sourceforge.net">nsharp@users.sourceforge.net</a><br>
+      <br>
+      </td>
+    </tr>
+    <tr>
+      <td class="tbLogBody2" colspan="2">
+      <h2>A Silly Picture of a Cat<br>
+      </h2>
+      <div style="margin-left: 40px;"><img
+ style="width: 466px; height: 640px;" alt="" src="cat.jpg"><br>
+      <br>
+      </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="tbLogBody" colspan="2"><small>Page
+Contents Copyright (c) 2004 Nathan P Sharp </small></td>
+    </tr>
+  </tbody>
+</table>
+<a href="/rides/showRides.php?start=10"><br>
+</a>
+<br>
+</body>
+</html>

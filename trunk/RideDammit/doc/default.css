@@ -1,0 +1,38 @@
+body, th, table, td {
+  font-family: Arial, Helvetica, Geneva, Swiss, SunSans-Regular;
+  background-color: white;
+  color: black;
+  font-size: 10pt;
+}
+
+body {
+  margin: 5px 5px;
+  padding: 0px;
+}
+
+a:link { color: #3333FF; text-decoration: underline; }
+a:visited { color: #663366; text-decoration: underline; }
+a:hover {  color: #000099; text-decoration: underline; }
+
+h1 { font-size: 15pt; }
+h2 { font-size: 14pt; }
+h3 { font-style: italic; font-size: 14pt; }
+h4 { font-size: 13pt; }
+h5 { font-style: italic; font-size: 12pt; }
+h6 { font-size: 11pt; }
+
+.tinyPrint { font-size: 8pt; }
+.errors { font-size: 11pt; color: red; }
+
+.tbLog { }
+.tbLogHeader { font-weight: bold; background-color: #ccafef; vertical-align: top; horizontal-align: center; }
+.tbLogBody { background-color: #ccccff; vertical-align: top; horizontal-align: left; }
+.tbLogBody2 { background-color: #aaaacc; vertical-align: top; horizontal-align: left; }
+.tbLogFootHead { background-color: #ccafef; font-weight: bold; vertical-align: top; horizontal-align: left; }
+.tbLogFoot { background-color: #ccafef; vertical-align: top; horizontal-align: left; }
+
+.tbEdit { }
+.tbEditHeader { background-color: #ccafef; vertical-align: top; horizontal-align: left; }
+.tbEditBody { background-color: #ccccff; vertical-align: top; horizontal-align: left; }
+.tbEditBody2 { background-color: #aaaacc; vertical-align: top; horizontal-align: left; }
+.tbEditSubTable { background-color: #aaaacc; }
