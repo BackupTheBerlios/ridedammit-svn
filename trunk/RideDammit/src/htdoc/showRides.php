@@ -381,13 +381,9 @@ if ( $riderCount > 1 )
   echo encodeGet($getVars);
   ?>">RSS Feed for current listing</a>
 &nbsp;&nbsp;&nbsp; --> 
-<a href="showRides.php<?php
-  $opposite = $units->opposite();
-  $tgetVars = $getVars;
-  $tgetVars["units"] = $opposite->unitsString();
-  echo encodeGet($tgetVars);
-  ?>"><?php
-   echo $opposite->unitsString() ?></a>
+<?php
+   drawUnitsLinks();
+?>
 </p>
 <?php include("footer.inc.html"); ?>
 </BODY>

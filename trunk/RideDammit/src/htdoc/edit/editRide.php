@@ -166,14 +166,7 @@ if ( $normMsg )
 }
 ?>
 <p class="tinyPrint">You are entering data in <?php echo $units->unitsString() ?>
-  units.  <a href="<?php
-   echo $HTTP_SERVER_VARS["PHP_SELF"];
-   $tgetVars = $getVars;
-   $opposite = $units->opposite();
-   $tgetVars["units"] = $opposite->unitsString();
-   echo encodeGet($tgetVars);
-   echo "\">Use ".$opposite->unitsString()." instead.</a>";
-   ?>
+  units.
 </p>
 <form method="post" action="<?php
    echo $HTTP_SERVER_VARS["PHP_SELF"].encodeGet($getVars) ?>">
@@ -223,7 +216,7 @@ if ( $normMsg )
                               echo $ride->getDatePart()
                            ?>" size="12" maxlen="15"><br>
                            </td>
-                           <td class="tbEditHeader">Hour<br>
+                           <td class="tbEditHeader">Start Time<br>
                            </td>
                            <td class="tbEditBody"><input
  type="text" name="hour" value="<?php
@@ -338,7 +331,8 @@ if ( $normMsg )
                           </td>
                                   </tr>
                          <tr>
-                           <td class="tbEditHeader">Distance<br>
+                           <td class="tbEditHeader">Distance(<?php 
+				echo $units->distanceString(); ?>)<br>
                            </td>
                            <td class="tbEditBody"><input
  type="text" name="distance" value="<?
@@ -354,7 +348,8 @@ if ( $normMsg )
                            </td>
                          </tr>
                          <tr>
-                           <td class="tbEditHeader">Max Speed<br>
+                           <td class="tbEditHeader">Max Speed(<?php
+				 echo $units->velocityString(); ?>)<br>
                            </td>
                            <td class="tbEditBody"><input
  type="text" name="maxSpeed" value="<?php
@@ -371,7 +366,7 @@ if ( $normMsg )
                            </td>
                          </tr>
           <tr>
-            <td class="tbEditHeader">Temp<br>
+            <td class="tbEditHeader">Temp(<?php echo $units->tempString(); ?>) <br>
             </td>
             <td class="tbEditBody"><input type="text"
  name="temperature" value="<?php
@@ -419,6 +414,11 @@ if ( $normMsg )
      $getVars["riderID"] = $ride->f_riderID;
   echo encodeGet($getVars) ?>">Back to rides</a>
 
-<?php include("footer.inc.html"); ?>
+<?php
+echo "<p>";
+drawUnitsLinks();
+echo "</p>\n";
+
+include("footer.inc.html"); ?>
 </body>
 </html>

@@ -118,8 +118,12 @@ if ( $msg )
 </center>
 <p>   <a href="edit/editRide.php<?php echo encodeGet($getVars) ?>">Edit this ride</a>    &nbsp;&nbsp;&nbsp;&nbsp;
       <a href="showRides.php<?php echo encodeGet($getVars) ?>">Back to rides</a> </p>
+<p>
+<?php
+drawUnitsLinks();
+echo "</p>\n";
 
-<?php include("footer.inc.html"); ?>
+include("footer.inc.html"); ?>
 
 </body>
 </html>

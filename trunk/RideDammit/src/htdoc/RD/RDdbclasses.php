@@ -261,11 +261,11 @@ function encodeGet($vars)
  * column settings for various database fields
  ************************************************/
 $availableEfforts = array(
-        "Low",
-        "Mild",
-        "Medium",
-        "Hard",
-        "Racing");
+   "Low",
+   "Mild",
+   "Medium",
+   "Hard",
+   "Racing");
 
 $availableSkies = array(
    "Clear",
@@ -305,6 +305,49 @@ function drawSelect($name, $elems, $selected)
    }
    $return .= "</select>\n";
    return $return;
+}
+
+/*********************************************************
+* Draws a link to the given page with the given get vars,
+* only with the units swapped out for $newUnits.  The
+* link text will be the human readable units name.  The
+* href is not added if $curUnits is equal to $newUnits.
+********************************************************/
+function drawUnitLink($newUnits, $curUnits, $url, $getVars)
+{
+   if ( $newUnits->mode != $curUnits->mode)
+   {
+      echo "<a href=\"$url";
+      $tgetVars = $getVars;
+      $tgetVars["units"] = $newUnits->unitsString();
+      echo encodeGet($tgetVars);
+      echo "\">";
+   }
+   echo $newUnits->humanUnitsString();
+   if ( $newUnits->mode != $curUnits->mode)
+   {
+      echo "</a>\n";
+   }
+}
+
+/*********************************************************
+* Draws the standard units switcher code which re-loads
+* the current page with the requested units.
+********************************************************/
+function drawUnitsLinks()
+{
+   global $units;
+
+   echo "Use [";
+   drawUnitLink(new RDunits(UNIT_METRIC), $units, 
+                  $_SERVER["PHP_SELF"], $_GET);
+   echo ", ";
+   drawUnitLink(new RDunits(UNIT_ENGLISH), $units, 
+                  $_SERVER["PHP_SELF"], $_GET);
+   echo ", ";
+   drawUnitLink(new RDunits(UNIT_SMALLMETRIC), $units, 
+                  $_SERVER["PHP_SELF"], $_GET);
+   echo "] units\n";
 }
 
 
@@ -352,11 +395,11 @@ class RDrider
 
    var $c_totalTime;
    var $c_totalDist;
-        var $c_avgDist;
-        var $c_maxDist;
+   var $c_avgDist;
+   var $c_maxDist;
    var $c_maxSpeed;
    var $c_avgSpeed;
-        var $c_maxAvgSpeed;
+   var $c_maxAvgSpeed;
    var $c_numRides;
 
    function RDrider($conn, $units)
@@ -968,7 +1011,7 @@ class RDride
 
 
 define(UNIT_METRIC, 1);
-define(UNIT_ENGLISH, 0);
+define(UNIT_ENGLISH, 3);
 define(UNIT_SMALLMETRIC, 2);
 
 /*************************************************
@@ -990,7 +1033,7 @@ class RDunits
    function RDunits($setting)
    {
       if ( ! isset($setting) || $setting == "metric" ||
-            $setting == UNIT_METRIC || $setting == "" )
+            $setting == UNIT_METRIC )
       {
          $this->mode = UNIT_METRIC;
       }
@@ -1070,7 +1113,20 @@ class RDunits
       case UNIT_METRIC:
          return "metric";
       case UNIT_SMALLMETRIC:
-         return "small metric";
+         return "smallMetric";
+      }
+   }
+   
+   function humanUnitsString()
+   {
+      switch ( $this->mode )
+      {
+      case UNIT_ENGLISH:
+         return "English";
+      case UNIT_METRIC:
+         return "Metric";
+      case UNIT_SMALLMETRIC:
+         return "Small Metric";
       }
    }
 
