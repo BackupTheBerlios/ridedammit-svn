@@ -23,6 +23,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //modify for your locale.  You need to always leave in a 0 distance,
 //enter your distances in kilometers, and put them in sorted order.
 
+/*NPS: The following list of distances is from the RideDammit! 
+   version of this site and isn't appropriate for swims.  Until
+   myself or someone else has time to make a decent list of 
+   swimming achievements (English Channel anyone?), this is here
+   but the achievements are not printed out in the template for
+   SwimDammit. */
+
 $RDdistanceClasses = array(
 new RDdistanceClass(0,"Nada",""),
 new RDdistanceClass(1, "your first kilometer", ""),
