@@ -1,0 +1,23 @@
+1) HTML Docs up to date
+2) Installation works
+3) Upgrade from previous works
+4) New Rider blocks access w/o code
+5) New Rider works (use new rider for 23 to test)
+6) Main Page shows most recent 10 rides in reverse order
+7) Next/Prev buttons work
+8) Rider Summaries show correct data
+9) Achievements work
+10) Switching english/metric works
+11) Spell Check everything
+12) Choosing a particular rider works
+13) Choosing a particular location type works
+14) Choosing a particular location works
+15) Choosing a particular bike works
+16) Selecting a ride shows details
+17) Back to Rides works
+18) Edit this ride goes to ride page
+19) Edit Ride - complain about password w/ wrong or no password
+20) Edit Ride works
+21) New Ride - Complains about password w/ wrong or no password
+22) New Ride - Complains w/ no bike or location info
+23) New Ride works
