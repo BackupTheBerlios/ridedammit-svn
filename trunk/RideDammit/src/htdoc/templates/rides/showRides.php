@@ -168,7 +168,7 @@ echo "</SELECT>\n";
       $tgetvars = $getVars;
       $tgetvars["rideID"]=$rides->f_rideID;
       echo encodeGet($tgetvars).
-         "\">".$rides->f_date."</a>&nbsp;".
+         "\">".$rides->getDatePart()." ".$rides->getTimePart()."</a>&nbsp;".
          "<img width='10' height='16' src=\"".
          getImgForTemp($rides->f_temperature, $units).
            "\">".

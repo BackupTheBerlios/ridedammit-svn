@@ -1026,12 +1026,22 @@ class RDride
    }
 
    /*************************************************
+    * The f_date field parameter is in MYSQL form.
+    * The following functions give and take it in
+    * localized forms
+    ************************************************/
+
+   /*************************************************
     * @return The date part of the date/time of the ride
     ************************************************/
    function getDatePart()
    {
-      $arr = split(" ", $this->f_date);
-      return $arr[0];
+      if ( $this->f_date == "" || $this->f_date == "0000-00-00 00:00:00" )
+         return "";
+      $tm = strtotime($this->f_date);
+      if ( $tm === -1 ) 
+         return "";
+      return strftime("%x", $tm);
    }
 
    /*************************************************
@@ -1039,8 +1049,25 @@ class RDride
     ************************************************/
    function getTimePart()
    {
-      $arr = split(" ", $this->f_date);
-      return $arr[1];
+      if ( $this->f_date == "" || $this->f_date == "0000-00-00 00:00:00" )
+         return "";
+      $tm = strtotime($this->f_date);
+      if ( $tm === -1 )
+         return "";
+      return strftime("%I:%M %p", $tm);
+   }
+   
+   function fromLocalizedTime($date)
+   {
+      $tm = strtotime($date);
+      if ( $tm === -1 )
+      {
+         $this->f_date = "0000-00-00 00:00:00";
+      }
+      else
+      {
+         $this->f_date = strftime("%Y-%m-%d %T", $tm);
+      }
    }
 }
 

@@ -37,8 +37,9 @@ if ( $HTTP_POST_VARS["submit"] )
 {
    //Fill in the info they submitted.
    $ride->f_riderID = (int)$HTTP_POST_VARS["rider"];
-   $ride->f_date = unFixQuotes($HTTP_POST_VARS["date"]). " " .
-                  unFixQuotes($HTTP_POST_VARS["hour"]);
+   $ride->fromLocalizedTime(
+                  unFixQuotes($HTTP_POST_VARS["date"]). " " .
+                  unFixQuotes($HTTP_POST_VARS["hour"]));
    $ride->f_distance = (double)$HTTP_POST_VARS["distance"];
    $ride->f_maxSpeed = (double)$HTTP_POST_VARS["maxSpeed"];
    $ride->f_time = unFixQuotes($HTTP_POST_VARS["time"]);

@@ -33,7 +33,8 @@ if ( $msg )
                    <tr>
                  <td class="tbLogHeader">Date</td>
                      <td class="tbLogBody">
-                     <?php echo $ride->f_date ?></td>
+                     <?php echo $ride->getDatePart()." ".
+                                $ride->getTimePart(); ?></td>
                  <td class="tbLogHeader">Time</td>
                      <td class="tbLogBody"><?php
                         echo $ride->f_time ?></td>
