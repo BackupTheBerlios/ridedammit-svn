@@ -19,7 +19,7 @@ along with Ride Dammit!; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require("RD/RDbootstrap.php");
+require("RD/config/RDbootstrap.php");
 require("RD/QueryAPI.php");
 
 define(DB_RIDES, DB_TABLEBASE."_rides");
@@ -1249,4 +1249,7 @@ class RDquery
 // Go ahead and create a units class with the current units per the
 // GET vars.
 $units = new RDunits($HTTP_GET_VARS[units]);
+
+include("RD/RDdistances.php");
+
 

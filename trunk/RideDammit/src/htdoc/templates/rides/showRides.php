@@ -302,6 +302,12 @@ while ( $riders->parseNextRow($results) )
    echo " <td class=\"tbLogBody\">".
          number_format($riders->c_mAvgSpeed,2)."</td>\n";
    echo "</tr>\n";
+   echo "<tr>\n";
+   $tdc = getDistanceClass($riders->c_totalDist);
+   echo " <td class=\"tbLogBody2\" colspan=\"9\">".
+         "You've ridden ".$tdc->asOutput();
+   echo "</td>\n";
+   echo "</tr>\n";
    $orides += $riders->c_numRides;
    $otime += $riders->c_totalTime;
    $odist += $riders->c_totalDist;
@@ -336,6 +342,11 @@ if ( $riderCount > 1 )
    echo " <td class=\"tbLogBody\">".
                    number_format($omAvgSpeed,2)."</td>\n";
    echo "</tr>\n";
+   echo "<tr>\n";
+   echo " <td class=\"tbLogBody2\" colspan=\"9\">";
+   $tdc = getDistanceClass($odist);
+   echo "Together you've ridden ".$tdc->asOutput();
+   echo "</td></tr>\n";
 }
 
 ?>
