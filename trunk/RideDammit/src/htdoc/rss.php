@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright(c) 2003 Nathan P Sharp
+Copyright(c) 2003-2004 Nathan P Sharp
 
 This file is part of Ride Dammit!.
 
@@ -30,6 +30,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 <?php
  require('RD/RDdbclasses.php');
 
+ //Initialize Variables and queries.
+ $getVars = $HTTP_GET_VARS;
+ $start = (int)$getVars["start"];
+ $num = (int)$getVars["num"];
+ if ( ! $num ) $num = 10;
+ $currentQuery = new RDquery($getVars);
+
  unset($getVars);
  $getVars[units] = $units->unitsString();
  if ( $HTTP_GET_VARS[showRidesFor] )
@@ -43,81 +50,38 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
  //Dump our rss header out
 
-echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-echo "<?xml-stylesheet href=\"http://www.w3.org/2000/08/w3c-synd/style.css\" type=\"text/css\"?>\n";
+echo "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n";
 ?>
-<rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:h="http://www.w3.org/1999/xhtml" xmlns:hr="http://www.w3.org/2000/08/w3c-synd/#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/">
-<channel rdf:about="<?php echo $about; ?>">
-  <title>Ride Dammit! RSS feed</title>
-  <link><?php echo $about; ?></link>
-  <description>RSS feed for Ride Dammit!</description>
-<?php
-/*
-  <image>
-    <url><?php echo "$conf->baseURL$conf->siteIconSmall"; ?></url>
-    <link><?php echo "$conf->baseURL$conf->siteIconURL"; ?></link>
-    <description><?php echo $conf->siteTitle; ?></description>
-  </image>
-*/
-?>
-  <items>
-   <rdf:Seq>
+<rss version="2.00">
+<channel>
+  <title><?php echo htmlentities(S_SITE_TITLE) ?> RSS feed</title>
+  <link><?php echo htmlentities($RD_baseURL."/showRides.php") ?></link>
+  <description>RSS feed for <?php echo htmlentities(S_SITE_TITLE) ?></description>
 <?php
 
 $rides = new RDride(DBconnect(), $units);
-$result = $rides->queryRidesForRider($HTTP_GET_VARS[showRidesFor]);
+$result = $rides->queryRides($currentQuery->getWhereStatement(), $start, $num);
 while ( $rides->parseNextRow($result) )
 {
    unset($tmpGetVars);
-   $tmpGetVars[units] = $units->unitsString();
-   $tmpGetVars[rideID] = $rides->f_rideID;
-   echo "<rdf:li rdf:resource=\"$RD_baseURL/showRide.php".
-        encodeGet($tmpGetVars).
-        "\"/>\n";
-}
-
-?>
-   </rdf:Seq>
-
-  </items>
- </channel>
-
-<?php
-
-//reset result
-mysql_data_seek($result, 0);
-while ($rides->parseNextRow($result))
-{
-   unset($tmpGetVars);
-   $tmpGetVars[units] = $units->unitsString();
-   $tmpGetVars[rideID] = $rides->f_rideID;
-   echo "<item rdf:about=\"$RD_baseURL/showRide.php".
-      encodeGet($tmpGetVars).
-      "\">\n";
-   $title = $rides->f_date.", ".$rides->f_time.", ".
-         number_format($rides->f_distance,2).", ".
-         fixFieldForRSS($rides->f_locationID_location);
-   echo " <title>".$title.
+   $tmpGetVars["units"] = $units->unitsString();
+   $tmpGetVars["rideID"] = $rides->f_rideID;
+   $itemLink = "$RD_baseURL/showRide.php".encodeGet($tmpGetVars);
+   $title = $rides->getDatePart()." ".$rides->getTimePart().", ".
+         number_format($units->metricToSetting(
+         $rides->f_distance),2)." ".$units->distanceString().", ".
+         fixFieldForHtml($rides->f_locationID_location, false);
+   echo "<item>\n";
+   echo " <title>".htmlentities($title).
          "</title>\n";
-   echo " <description>".$title.
-         fixFieldForRSS("\n\n".$rides->f_notes).
+   echo " <description>".htmlentities($title.
+         fixFieldForHtml("\n\n".$rides->f_notes, true)).
          "</description>\n";
-   echo " <link>$RD_baseURL/showRide.php".
-          encodeGet($tmpGetVars).
+   echo " <link>".htmlentities($itemLink).
          "</link>\n";
-/*
-   echo " <image>\n";
-   echo "  <url>$conf->baseURL$imageURL?image=$data[imageID]&amp;format=thumb</url>\n";
-   echo "  <link>$conf->baseURL$topURL?dir=".
-        "$data[dirID]&amp;image=$data[imageID]</link>\n";
-   echo "  <width>$width</width>\n";
-   echo "  <height>$height</height>\n";
-   echo "  <description>".fixFieldForHtml($data[name])."</description>\n";
-   echo " </image>\n";
-*/
    echo "</item>\n";
 }
 
 ?>
-
-</rdf:RDF>
+</channel>
+</rss>
