@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="default.css">
   <meta http-equiv="content-type"
  content="text/html; charset=ISO-8859-1">
+  <meta content="PHP, MySQL, free, open, source, RD, ridedammit, ride, dammit, bike, swimming, biking, riding, log, swim, run" name="keywords" />
 </head>
 <body>
 <table class="tbLog" border="0" cellpadding="2" cellspacing="2">
@@ -15,14 +16,18 @@
       <td style="vertical-align: middle;" class="tbLogHeader">
       <h1>Ride Dammit! Ride Log</h1>
       </td>
+      <td width="64" height="64" class="tbLogHeader"><img
+      src="SwimDammit.png" width="64" height="64"></td>
     </tr>
     <tr>
-      <td class="tbLogBody" colspan="2">
+      <td class="tbLogBody" colspan="3">
       <h2>Introduction</h2>
 Ride Dammit! is a web-based bicycle ride log which is designed to be
 simple and easy to use. It provides basic functionality for a small
 group of riders including tracking of maximum/average type information
-for different terrains and locations.<br>
+for different terrains and locations.  It also contains distance 
+achievement measurements, everything from "Your first mile", to "You've
+ridden arond the world."<br>
       <br>
 Project goals are:<br>
       <ol>
@@ -35,6 +40,10 @@ their riding logs.</li>
         <li>Ability to track rides based on rider, location, bicycle,
 and terrain as well as collect weather information and a ride
 description, which may include photos.</li>
+        <li>Generic enough sub-system that other activities can be 
+handled.  A "Swim Dammit!" version is now available and a "By Foot" 
+version should be forthcoming for handling swimming, running, and
+walking logs.</li>
       </ol>
 Ride Dammit! uses PHP/MySQL and is delivered entirely over the
 web.&nbsp; Ride Dammit! uses the GNU Public License.<br>
@@ -42,18 +51,24 @@ web.&nbsp; Ride Dammit! uses the GNU Public License.<br>
       </td>
     </tr>
     <tr>
-      <td class="tbLogBody2" colspan="2">
+      <td class="tbLogBody2" colspan="3">
       <h2>News</h2>
       <ul>
-        <li>Oh, if I had more time, I'd come up with a groovy news item
+        <li>3/7/04 - Much development work has gone into play recently
+        to enable the system to be used generically for other activities,
+        the first of which is swimming.  Also added a new feature for
+        comparing your total distance to various achievements, like biking
+        across the USA.</li>
+        <li>12/12/03 - Oh, if I had more time, I'd come up with a groovy news item
 every month for you. As it is, just download it and try it out.</li>
       </ul>
       <br>
       </td>
     </tr>
     <tr>
-      <td class="tbLogBody" colspan="2">
+      <td class="tbLogBody" colspan="3">
       <h2>Screen Shots and Sample Site</h2>
+      <p>Both are out of date slightly :(</p>
       <p>Click on the thumbnails for larger images.</p>
       <p><a href="main1.png"><img
  style="border: 0px solid ; width: 200px; height: 148px;"
@@ -66,23 +81,25 @@ every month for you. As it is, just download it and try it out.</li>
  alt="Add Ride Page" src="addRidet.png"></a><br>
       </p>
       <p><a href="http://www.northernneckcycling.org">Northern Neck
-Cycling</a> uses a <a
- href="http://www.northernneckcycling.org/rides/showRides.php?units=english">mildly
-customized version of Ride Dammit!</a> to keep track of their rides.<br>
-      <br>
+Cycling</a> uses <a
+ href="http://www.northernneckcycling.org/rides/showRides.php?units=english">
+ Ride Dammit!</a> to keep track of their rides.</p>
+ <p>I am looking for other sites using the RD system which wouldn't mind
+ being a sample site.  Contact me if you are willing to have a link added
+ from here.
       </p>
       </td>
     </tr>
     <tr>
-      <td class="tbLogBody2" colspan="2">
+      <td class="tbLogBody2" colspan="3">
       <h2>Installation</h2>
-This project is still very new. No installation scripts are available
-and documentation is skimpy, at best. If you want to use this project
-and have troubles, drop me a line at the address above. I'd be happy to
-help you and in the process you'll probably prod me into doing more
-documentation.&nbsp; That being said, there isn't much too it.<br>
+Sufficient time to make really snazzy, easy to use installation scripts
+is, well, scarce, but if you have even mild familiarity with PHP
+and MySQL, you should be able to get it up and running.  If you want to
+use this project and have troubles, drop me a line at the address
+above and I'd be happy to help you.<br>
       <br>
-To run Ride Dammit!, you need to do the following:<br>
+To run Ride Dammit! v1.0, you need to do the following:<br>
       <ol>
         <li>Create a MySQL database and a user which has access to it.</li>
         <li>Create the initial SQL tables from the .sql file. If you
@@ -93,7 +110,7 @@ the username "fred":<br>
         <li>Put the files under htdoc into a published directory on
 your web server. For added security, you can optionally move the RD
 subdirectory to a PHP include location.</li>
-        <li>Edit RD/RDbootstrap.php and enter in the appropriate
+        <li>Edit RD/config/RDbootstrap.php and enter in the appropriate
 database connection information and base URL for your ride log. </li>
         <li>The "authorization code" to create a new rider is currently
 hardcoded into newRider.php (as is the silly hint message).&nbsp;
@@ -101,10 +118,30 @@ You'll have to add users manually in the database, manually fix the
 hardcoded values, or encourage me to correct that ;-)</li>
       </ol>
       <br>
+To UPGRADE from 0.5, you need to do the following:<br>
+      <ol>
+       <li>Take the old site offline temporarily by simply moving
+        the old files.  The new code moves things around some, so
+        don't try to install over top of an existing installation.
+        Don't worry, you're data will be preserved. </li>
+       <li>Make a backup of your database</li>
+       <li>Update your database.  I've included a script which should
+        upgrade your old database to the new format.  Use the
+        .sql file "RDupdate0.5to1.0.sql".</li>
+        <li>Put the files under htdoc into a published directory on
+your web server. For added security, you can optionally move the RD
+subdirectory to a PHP include location.</li>
+       <li>Edit the RD/config/RDbootstrap.php file and make the
+        necessary changes.  Do not try to reuse your old one, there
+        are new options in there.</li>
+       <li>You should make the changes for the "authorization code"
+        as mentioned above again (sorry).</li>
+      </ol>
+      <br>
       </td>
     </tr>
     <tr>
-      <td class="tbLogBody" colspan="2">
+      <td class="tbLogBody" colspan="3">
       <h2>Author/Bugs/More Info<br>
       </h2>
 This project is maintained by Nathan P Sharp. Comments, suggestions and
@@ -118,7 +155,7 @@ But may additionally be sent to <a
       </td>
     </tr>
     <tr>
-      <td class="tbLogBody2" colspan="2">
+      <td class="tbLogBody2" colspan="3">
       <h2>A Silly Picture of a Cat<br>
       </h2>
       <div style="margin-left: 40px;"><img
@@ -128,7 +165,7 @@ But may additionally be sent to <a
       </td>
     </tr>
     <tr>
-      <td class="tbLogBody" colspan="2"><small>Page
+      <td class="tbLogBody" colspan="3"><small>Page
 Contents Copyright (c) 2004 Nathan P Sharp </small></td>
     </tr>
   </tbody>
