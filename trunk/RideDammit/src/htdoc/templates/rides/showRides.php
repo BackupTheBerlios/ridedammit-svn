@@ -255,6 +255,7 @@ if ( $currentQuery->getWhereStatement() )
    echo "(using query specified at page top)<br>";
 }
 ?>
+<!--<p><a href="riderStats.php">View Graphs</a></p>-->
 <table class="tbLog" width="80%" border=0 cellpadding=3 cellSpacing=3>
  <tbody>
   <tr>
