@@ -61,7 +61,6 @@ new RDdistanceClass(2145.2,"The Great Rivers (IA to LA)","http://www.adventurecy
 new RDdistanceClass(2541.2,"The Western Express (CA to CO)","http://www.adventurecycling.org/routes/westernexpress.cfm"),
 new RDdistanceClass(2732.4,"quarter way around the moon",""),
 new RDdistanceClass(2954.8,"The Pacific Coast (BC to CA)","http://www.adventurecycling.org/routes/pacificcoast.cfm"),
-new RDdistanceClass(3395.0,"The Tour de France 2004", "http://www.letour.fr/2004/presentationus/parcours.html"),
 new RDdistanceClass(3572.0,"half way around Pluto",""),
 new RDdistanceClass(3950.9,"The Great Parks (AB to CO)","http://www.adventurecycling.org/routes/greatparks.cfm"),
 new RDdistanceClass(4007.3,"The Great Divide (MT to NM)","http://www.adventurecycling.org/routes/greatdivide.cfm"),

@@ -197,7 +197,7 @@ if ( $normMsg )
             echo number_format($ride->f_distance,2)
          ?>" size="12" maxlen="15"><br>
                            </td>
-                           <td class="tbEditHeader">Length<br>
+                           <td class="tbEditHeader">Length(duration)<br>
                           </td>
                            <td class="tbEditBody"><input
  type="text" name="time" value="<?php

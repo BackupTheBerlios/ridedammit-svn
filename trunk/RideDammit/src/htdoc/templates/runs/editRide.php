@@ -36,7 +36,7 @@ if ( $normMsg )
 </p>
 <form method="post" action="<?php
    echo $HTTP_SERVER_VARS["PHP_SELF"].encodeGet($getVars) ?>">
-
+<input type="hidden" name="bike" value="-1">
   <table class="tbEdit" width="95%">
                        <tbody>
                          <tr>
@@ -97,7 +97,7 @@ if ( $normMsg )
                            <td class="tbEditBody">
 
 
-         <input type="hidden" name="bike" value="-1">
+
         <select name="location">
         <option value="0">New Location --&gt;</option>
         <?php
@@ -130,6 +130,7 @@ if ( $normMsg )
                                 <td class="tbEditBody2">
 
 
+
               <?php
                  echo drawSelect("newLocationType", $RDlocationTypes, "");
               ?>
@@ -160,18 +161,15 @@ if ( $normMsg )
             echo number_format($ride->f_distance,2)
          ?>" size="12" maxlen="15"><br>
                            </td>
-                           <td class="tbEditHeader">Length(duration)<br>
+                           <td class="tbEditHeader">Length<br>
                           </td>
                            <td class="tbEditBody"><input
  type="text" name="time" value="<?php
             echo $ride->f_time
-         ?>" size="12" maxlen="15">
-         <input type="hidden" name="maxSpeed" value="0">
-         <br>
+         ?>" size="12" maxlen="15"><br>
                            </td>
                          </tr>
                          <tr>
-
                            <td class="tbEditHeader">Effort<br>
                           </td>
                            <td class="tbEditBody">
@@ -184,7 +182,7 @@ if ( $normMsg )
             <td class="tbEditHeader" rowspan="4" colspan="1">Notes<br>
             </td>
             <td class="tbEditBody" rowspan="4" colspan="1"><textarea
- name="notes" wrap="virtual" rows="4" cols="40"><?php
+ name="notes" wrap="virtual" rows="5" cols="40"><?php
       echo fixFieldForTextArea($ride->f_notes)
       ?></textarea><br>
             </td>
@@ -198,8 +196,6 @@ if ( $normMsg )
          echo number_format($ride->f_temperature, 1)
          ?>" size="12" maxlen="15"><br>
             </td>
-
-
           </tr>
           <tr>
             <td class="tbEditHeader">Sky<br>

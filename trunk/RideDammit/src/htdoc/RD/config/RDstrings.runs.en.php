@@ -18,11 +18,22 @@ You should have received a copy of the GNU General Public License
 along with Ride Dammit!; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+
+define(S_SITE_TITLE,       "Run Dammit!");
+define(S_ENGLISH_UNITS,    "English");
+define(S_METRIC_UNITS,     "Metric");
+define(S_ENGLISH_DISTANCE, "mi");
+define(S_METRIC_DISTANCE,  "km");
+define(S_ENGLISH_VELOCITY, "mph");
+define(S_METRIC_VELOCITY,  "km/h");
+define(S_ENGLISH_TEMP,     "&deg;F");
+define(S_METRIC_TEMP,      "&deg;C");
+define(C_METRIC_TO_ENGLISH_DIST, 0.6213712);
+define(C_ENGLISH_TO_METRIC_DIST, 1.609344);
+define(S_PERSON,           "Runner");
+define(S_PERSONS,          "Runners");
+define(S_EVENT,            "Run");
+define(S_EVENTS,           "Runs");
+$RDlocationTypes = array(
+  "Road", "Trail", "Track", "Mixed");
 ?>
-<table border=0 cellpadding=0 cellspacing=0>
- <tr>
-  <td><img src="<?php echo $RD_baseURL?>/templates/<?php
-            echo $RD_template; ?>/siteIcon.png" width="64" height="64"></td>
-  <td><H1><?php echo S_SITE_TITLE." ".$pageTitle?></H1></td>
- </tr>
-</table>
