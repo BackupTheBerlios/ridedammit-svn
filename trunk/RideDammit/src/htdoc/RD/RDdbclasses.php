@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright(c) 2003 Nathan P Sharp
+Copyright(c) 2003-2004 Nathan P Sharp
 
 This file is part of Ride Dammit!.
 
@@ -21,6 +21,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require("RD/RDbootstrap.php");
 require("RD/QueryAPI.php");
+
+define(DB_RIDES, DB_TABLEBASE."_rides");
+define(DB_RIDERS, DB_TABLEBASE."_riders");
+define(DB_LOCATIONS, DB_TABLEBASE."_locations");
+define(DB_BIKES, DB_TABLEBASE."_bikes");
 
 //----------------------------------------------------------------------------
 // COMMONLY USED FUNCTIONS
@@ -323,7 +328,7 @@ function drawUnitLink($newUnits, $curUnits, $url, $getVars)
       echo encodeGet($tgetVars);
       echo "\">";
    }
-   echo $newUnits->humanUnitsString();
+   echo $newUnits->unitsString();
    if ( $newUnits->mode != $curUnits->mode)
    {
       echo "</a>\n";
@@ -339,13 +344,10 @@ function drawUnitsLinks()
    global $units;
 
    echo "Use [";
-   drawUnitLink(new RDunits(UNIT_METRIC), $units, 
+   drawUnitLink(new RDunits(UNIT_METRIC), $units,
                   $_SERVER["PHP_SELF"], $_GET);
    echo ", ";
-   drawUnitLink(new RDunits(UNIT_ENGLISH), $units, 
-                  $_SERVER["PHP_SELF"], $_GET);
-   echo ", ";
-   drawUnitLink(new RDunits(UNIT_SMALLMETRIC), $units, 
+   drawUnitLink(new RDunits(UNIT_ENGLISH), $units,
                   $_SERVER["PHP_SELF"], $_GET);
    echo "] units\n";
 }
@@ -412,7 +414,7 @@ class RDrider
    {
       $riderID = (int)$riderID; //security
       $result = singleQuery($this->conn,
-         "select * from riders where riderID=".
+         "select * from ".DB_RIDERS." where riderID=".
          (int)$riderID);
       if ( ! $result )
       {
@@ -430,7 +432,8 @@ class RDrider
    function insertNew($newPword)
    {
       normalQuery($this->conn,
-              "insert into riders (firstName, lastName, pword) ".
+              "insert into ".DB_RIDERS.
+              " (firstName, lastName, pword) ".
               " values(\"".addSlashes($this->f_firstName).
               "\", \"". addSlashes($this->f_lastName) .
               "\", password(\"". addSlashes($newPword) .
@@ -446,7 +449,8 @@ class RDrider
    function checkPerms($riderID, $password)
    {
       $result = singleQuery($this->conn,
-         "select riderID from riders where riderID=".
+         "select riderID from ".DB_RIDERS.
+         " where riderID=".
             (int)$riderID." and pword=password('".
             addSlashes($password)."')");
       return $result["riderID"]==$riderID;
@@ -460,7 +464,8 @@ class RDrider
          $whereClause = "where ".$query->toString();
       }
       $result = normalQuery($this->conn,
-         "select * from riders $whereClause order by lastName, firstName");
+         "select * from ".DB_RIDERS.
+         " $whereClause order by lastName, firstName");
       return $result;
    }
 
@@ -476,18 +481,23 @@ class RDrider
          $whereClause = "where ".$query->toString();
       }
       $result = normalQuery($this->conn,
-         "select riders.*,sum(rides.distance) as tDist, ".
-               " sum(TIME_TO_SEC(rides.time)) as tTime, ".
-               " max(rides.maxSpeed) as maxSpeed, ".
-               " avg(rides.distance) as aDist, ".
-                                        " max(rides.distance) as mDist, ".
-                                        " max(rides.distance*3600/TIME_TO_SEC(rides.time)) as mAvgSpeed, ".
-               " count(rides.rideID) as numRides ".
-               " from riders left join rides on rides.riderID=riders.riderID ".
-               "   left join locations on rides.locationID=locations.locationID ".
+         "select ".DB_RIDERS.".*,".
+               "sum(distance) as tDist, ".
+               " sum(TIME_TO_SEC(time)) as tTime, ".
+               " max(maxSpeed) as maxSpeed, ".
+               " avg(distance) as aDist, ".
+               " max(distance) as mDist, ".
+               " max(distance*3600/TIME_TO_SEC(time)) as mAvgSpeed, ".
+               " count(rideID) as numRides ".
+               " from ".DB_RIDERS.
+               "  left join ".DB_RIDES.
+               "   on ".DB_RIDES.".riderID=".DB_RIDERS.".riderID ".
+               "  left join ".DB_LOCATIONS.
+               "   on ".DB_RIDES.".locationID=".DB_LOCATIONS.".locationID ".
                $whereClause.
-               " group by riders.riderID order by riders.lastName, ".
-               "   riders.firstName");
+               " group by ".DB_RIDERS.".riderID ".
+               " order by ".DB_RIDERS.".lastName, ".
+               "   ".DB_RIDERS.".firstName");
       return $result;
    }
 
@@ -514,16 +524,16 @@ class RDrider
       if ( isset($result["tTime"] ) )
       {
          $this->c_totalTime = $result["tTime"];
-         $this->c_totalDist = $this->units->kmToSetting($result["tDist"]);
-         $this->c_maxSpeed = $this->units->kmToSetting($result["maxSpeed"]);
+         $this->c_totalDist = $this->units->metricToSetting($result["tDist"]);
+         $this->c_maxSpeed = $this->units->metricToSetting($result["maxSpeed"]);
          if ( $this->c_totalTime > 0 )
             $this->c_avgSpeed = $this->c_totalDist/$this->c_totalTime*3600;
          else
             $this->c_avgSpeed = 0;
          $this->c_numRides = $result["numRides"];
-                        $this->c_mAvgSpeed = $this->units->kmToSetting($result["mAvgSpeed"]);
-                        $this->c_mDist = $this->units->kmToSetting($result["mDist"]);
-                        $this->c_aDist = $this->units->kmToSetting($result["aDist"]);
+                        $this->c_mAvgSpeed = $this->units->metricToSetting($result["mAvgSpeed"]);
+                        $this->c_mDist = $this->units->metricToSetting($result["mDist"]);
+                        $this->c_aDist = $this->units->metricToSetting($result["aDist"]);
       }
    }
 }
@@ -537,7 +547,6 @@ class RDbike
 
    var $f_bikeID;
    var $f_bike;
-   var $f_computerSetting;
    var $f_riderID;
    var $j_riderID_firstName;
    var $j_riderID_lastName;
@@ -559,10 +568,9 @@ class RDbike
          return "Can't add bike, none specified.";
       }
       normalQuery($this->conn,
-              "insert into bikes (bike, computerSetting, riderID) ".
+              "insert into ".DB_BIKES." (bike, riderID) ".
               " values(\"".addSlashes($this->f_bike).
-              "\", ". (int)$this->f_computerSetting .
-              "  , ". (int)$this->f_riderID .
+              "\", ". (int)$this->f_riderID .
               "  )");
       $this->f_bikeID = mysql_insert_id();
    }
@@ -571,11 +579,12 @@ class RDbike
    {
       $bikeID = (int)$bikeID; //security
       $result = singleQuery($this->conn,
-         "select bikes.*, ".
-            "    riders.firstName, ".
-            "    riders.lastName ".
-            "   from bikes ".
-            "    left join riders on bikes.riderID=riders.riderID ".
+         "select ".DB_BIKES.".*, ".
+            "    firstName, ".
+            "    lastName ".
+            "   from ".DB_BIKES." ".
+            "    left join ".DB_RIDERS.
+            "     on ".DB_BIKES.".riderID=".DB_RIDERS.".riderID ".
             "   where bikeID=$bikeID");
       if ( ! $result )
       {
@@ -588,12 +597,13 @@ class RDbike
    function queryAll()
    {
       $result = normalQuery($this->conn,
-         "select bikes.*, ".
-            "    riders.firstName, ".
-            "    riders.lastName ".
-            "   from bikes ".
-            "    left join riders on bikes.riderID=riders.riderID ".
-            "   order by riders.lastName, riders.firstName, bike");
+         "select ".DB_BIKES.".*, ".
+            "    firstName, ".
+            "    lastName ".
+            "   from ".DB_BIKES.
+            "    left join ".DB_RIDERS.
+            "     on ".DB_BIKES.".riderID=".DB_RIDERS.".riderID ".
+            "   order by lastName, firstName, bike");
       return $result;
    }
 
@@ -615,7 +625,6 @@ class RDbike
    {
       $this->f_bikeID = $result[bikeID];
       $this->f_bike = $result[bike];
-      $this->f_computerSetting = $result[computerSetting];
       $this->f_riderID = $result[riderID];
       $this->j_riderID_firstName = $result[firstName];
       $this->j_riderID_lastName = $result[lastName];
@@ -651,7 +660,8 @@ class RDlocation
          return "Can't add location, none specified.";
       }
       normalQuery($this->conn,
-              "insert into locations (location, description, type) ".
+              "insert into ".DB_LOCATIONS.
+              " (location, description, type) ".
               " values(\"".addSlashes($this->f_location).
               "\", \"". addSlashes($this->f_description) .
               "\", \"". addSlashes($this->f_type) .
@@ -664,7 +674,7 @@ class RDlocation
       $locationID = (int)$locationID; //security
       $result = singleQuery($this->conn,
          "select * ".
-            "   from locations ".
+            "   from ".DB_LOCATIONS.
             "   where locationID=$locationID");
       if ( ! $result )
       {
@@ -677,7 +687,7 @@ class RDlocation
    function queryAll()
    {
       $result = normalQuery($this->conn,
-            "select * from locations order by type, location");
+            "select * from ".DB_LOCATIONS." order by type, location");
       return $result;
    }
 
@@ -775,14 +785,14 @@ class RDride
          return $msg;
       }
       normalQuery($this->conn,
-              "insert into rides ".
+              "insert into ".DB_RIDES." ".
               "(riderID, date, distance, maxSpeed, time, ".
               "locationID, temperature, wind, sky, effortLevel, ".
               "bikeID, notes) values ( ".
               (int)$this->f_riderID .
               ", \"". addSlashes($this->f_date) .
-              "\", ". $this->units->settingToKM((double)$this->f_distance) .
-              ", ". $this->units->settingToKM((double)$this->f_maxSpeed) .
+              "\", ". $this->units->settingToMetric((double)$this->f_distance) .
+              ", ". $this->units->settingToMetric((double)$this->f_maxSpeed) .
               ", \"". addSlashes($this->f_time) .
               "\", ". (int)$this->f_locationID .
               ", ". $this->units->settingToCelsius((double)$this->f_temperature) .
@@ -810,10 +820,10 @@ class RDride
          return $msg;
       }
       $result = normalQuery($this->conn,
-             "update rides set ".
+             "update ".DB_RIDES." set ".
               "date=\"". addSlashes($this->f_date) .
-              "\", distance=". $this->units->settingToKM((double)$this->f_distance) .
-              ", maxSpeed=". $this->units->settingToKM((double)$this->f_maxSpeed) .
+              "\", distance=". $this->units->settingToMetric((double)$this->f_distance) .
+              ", maxSpeed=". $this->units->settingToMetric((double)$this->f_maxSpeed) .
               ", time=\"". addSlashes($this->f_time) .
               "\", locationID=". (int)$this->f_locationID .
               ", temperature=". $this->units->settingToCelsius((double)$this->f_temperature) .
@@ -837,7 +847,7 @@ class RDride
       $result = singleQuery($this->conn,
          $this->_selectPart().
          $this->_fromJoinPart().
-         "  where rides.rideID=$rideID");
+         "  where rideID=$rideID");
 
       if ( ! $result )
       {
@@ -871,15 +881,15 @@ class RDride
    function _selectPart()
    {
       return
-         "select rides.*, ".
-         "       bikes.bike,".
-         "       locations.location, ".
-         "       locations.description, ".
-         "       locations.type, ".
-         "       riders.firstName, ".
-         "       riders.lastName, ".
-         "       rides.distance*3600/TIME_TO_SEC(rides.time) as avgSpeed, ".
-         "       TIME_TO_SEC(rides.time) as timeSecs ";
+         "select ".DB_RIDES.".*, ".
+         "       bike,".
+         "       location, ".
+         "       ".DB_LOCATIONS.".description, ".
+         "       ".DB_LOCATIONS.".type, ".
+         "       firstName, ".
+         "       lastName, ".
+         "       distance*3600/TIME_TO_SEC(time) as avgSpeed, ".
+         "       TIME_TO_SEC(time) as timeSecs ";
    }
 
    /*************************************************
@@ -889,10 +899,13 @@ class RDride
    function _fromJoinPart()
    {
       return
-         "  from rides ".
-         "    left join riders on riders.riderID=rides.riderID".
-         "    left join locations on locations.locationID=rides.locationID ".
-         "    left join bikes on bikes.bikeID=rides.bikeID ";
+         "  from ".DB_RIDES.
+         "    left join ".DB_RIDERS.
+         "     on ".DB_RIDERS.".riderID=".DB_RIDES.".riderID".
+         "    left join ".DB_LOCATIONS.
+         "     on ".DB_LOCATIONS.".locationID=".DB_RIDES.".locationID ".
+         "    left join ".DB_BIKES.
+         "     on ".DB_BIKES.".bikeID=".DB_RIDES.".bikeID ";
    }
 
    /*************************************************
@@ -914,13 +927,13 @@ class RDride
       $whereClause = "";
       if ( $riderID )
       {
-         $whereClause = "where rides.riderID=$riderID";
+         $whereClause = "where ".DB_RIDES.".riderID=$riderID";
       }
       $result = normalQuery($this->conn,
          $this->_selectPart().
          $this->_fromJoinPart().
          $whereClause.
-         " order by rides.date desc limit $start,$num");
+         " order by date desc limit $start,$num");
       return $result;
    }
 
@@ -947,7 +960,7 @@ class RDride
          $this->_selectPart().
          $this->_fromJoinPart().
          $whereClause.
-         " order by rides.date desc limit $start,$num");
+         " order by date desc limit $start,$num");
       return $result;
    }
 
@@ -972,8 +985,8 @@ class RDride
       $this->f_riderID_firstName = $result[firstName];
       $this->f_riderID_lastName = $result[lastName];
       $this->f_date = $result[date];
-      $this->f_distance = $this->units->kmToSetting($result[distance]);
-      $this->f_maxSpeed = $this->units->kmToSetting($result[maxSpeed]);
+      $this->f_distance = $this->units->metricToSetting($result[distance]);
+      $this->f_maxSpeed = $this->units->metricToSetting($result[maxSpeed]);
       $this->f_time = $result[time];
       $this->f_timeSecs = $result[timeSecs];
       $this->f_locationID = $result[locationID];
@@ -987,7 +1000,7 @@ class RDride
       $this->f_bikeID = $result[bikeID];
       $this->f_bikeID_bike = $result[bike];
       $this->f_notes = $result[notes];
-      $this->c_avgSpeed = $this->units->kmToSetting($result[avgSpeed]);
+      $this->c_avgSpeed = $this->units->metricToSetting($result[avgSpeed]);
    }
 
    /*************************************************
@@ -1012,7 +1025,6 @@ class RDride
 
 define(UNIT_METRIC, 1);
 define(UNIT_ENGLISH, 3);
-define(UNIT_SMALLMETRIC, 2);
 
 /*************************************************
  * Class which represents the current units in
@@ -1024,54 +1036,40 @@ class RDunits
    var $mode;
 
    /*************************************************
-    * @param $setting if "metric" or 1, current units
-    *         are in metric.  If "english" or 0, current
-    *         units are english.  If "smallMetric" or 2,
-    *         units are smaller metric units (m instead
-    *         of km) All other input is undefined.
+    * @param $setting What type of units to use. May
+    *   be a string or one of the constants defined
+    *   above.
     ************************************************/
    function RDunits($setting)
    {
-      if ( ! isset($setting) || $setting == "metric" ||
-            $setting == UNIT_METRIC )
+      if ( isset($setting) && 
+           ( (strcasecmp($setting,S_ENGLISH_UNITS) == 0) ||
+             ($setting == UNIT_ENGLISH) ) )
       {
-         $this->mode = UNIT_METRIC;
-      }
-      elseif ( $setting == "smallMetric" ||
-                $setting == UNIT_SMALLMETRIC )
-      {
-         $this->mode = UNIT_SMALLMETRIC;
+         $this->mode = UNIT_ENGLISH;
       }
       else
       {
-         $this->mode = UNIT_ENGLISH;
+         $this->mode = UNIT_METRIC;
          //NPS: Yea, I hate not having an error for invalid
          //input.
       }
    }
 
-   function kmToSetting($in)
+   function metricToSetting($in)
    {
       if ( $this->mode == UNIT_ENGLISH )
       {
-         return $in * 0.6213712;
-      }
-      elseif ( $this->mode == UNIT_SMALLMETRIC )
-      {
-         return $in * 1000;
+         return $in * C_METRIC_TO_ENGLISH_DIST; //0.6213712;
       }
       return $in;
    }
 
-   function settingToKM($in)
+   function settingToMetric($in)
    {
       if ( $this->mode == UNIT_ENGLISH )
       {
-         return $in * 1.609344;
-      }
-      elseif ( $this->mode == UNIT_SMALLMETRIC )
-      {
-         return $in / 1000;
+         return $in * C_ENGLISH_TO_METRIC_DIST; //1.609344;
       }
       return $in;
    }
@@ -1109,24 +1107,9 @@ class RDunits
       switch ( $this->mode )
       {
       case UNIT_ENGLISH:
-         return "english";
+         return S_ENGLISH_UNITS;
       case UNIT_METRIC:
-         return "metric";
-      case UNIT_SMALLMETRIC:
-         return "smallMetric";
-      }
-   }
-   
-   function humanUnitsString()
-   {
-      switch ( $this->mode )
-      {
-      case UNIT_ENGLISH:
-         return "English";
-      case UNIT_METRIC:
-         return "Metric";
-      case UNIT_SMALLMETRIC:
-         return "Small Metric";
+         return S_METRIC_UNITS;
       }
    }
 
@@ -1135,11 +1118,9 @@ class RDunits
       switch ( $this->mode )
       {
       case UNIT_ENGLISH:
-         return "mi";
+         return S_ENGLISH_DISTANCE;
       case UNIT_METRIC:
-         return "km";
-      case UNIT_SMALLMETRIC:
-         return "m";
+         return S_METRIC_DISTANCE;
       }
    }
 
@@ -1148,11 +1129,9 @@ class RDunits
       switch ( $this->mode )
       {
       case UNIT_ENGLISH:
-         return "mph";
+         return S_ENGLISH_VELOCITY;
       case UNIT_METRIC:
-         return "km/h";
-      case UNIT_SMALLMETRIC:
-         return "m/h";
+         return S_METRIC_VELOCITY;
       }
    }
 
@@ -1161,19 +1140,10 @@ class RDunits
       switch ( $this->mode )
       {
       case UNIT_ENGLISH:
-         return "&deg;F";
+         return S_ENGLISH_TEMP;
       case UNIT_METRIC:
-      case UNIT_SMALLMETRIC:
-         return "&deg;C";
+         return S_METRIC_TEMP;
       }
-   }
-
-   /******
-    * deprecated
-    ******/
-   function opposite()
-   {
-      return new RDunits($this->isEnglish()?"metric":"english");
    }
 }
 
@@ -1240,7 +1210,7 @@ class RDquery
       if ( $this->riderID > 0 )
       {
          $newClause = new QueryBinaryOp(
-              new QueryColumnRef("rides.riderID"),
+              new QueryColumnRef(DB_RIDES.".riderID"),
               "=",
               new QueryIntLiteral($this->riderID));
          $currentWhere = $this->_andOn($currentWhere, $newClause);
@@ -1248,7 +1218,7 @@ class RDquery
       if ( ((int)$this->locationID) > 0 )
       {
          $newClause = new QueryBinaryOp(
-              new QueryColumnRef("rides.locationID"),
+              new QueryColumnRef(DB_RIDES.".locationID"),
               "=",
               new QueryIntLiteral((int)$this->locationID));
          $currentWhere = $this->_andOn($currentWhere, $newClause);
@@ -1256,7 +1226,7 @@ class RDquery
       elseif ( $this->locationID )
       {
          $newClause = new QueryBinaryOp(
-              new QueryColumnRef("locations.type"),
+              new QueryColumnRef(DB_LOCATIONS.".type"),
               "=",
               new QueryStrLiteral($this->locationID));
          $currentWhere = $this->_andOn($currentWhere, $newClause);
@@ -1264,7 +1234,7 @@ class RDquery
       if ( $this->bikeID > 0 )
       {
          $newClause = new QueryBinaryOp(
-              new QueryColumnRef("rides.bikeID"),
+              new QueryColumnRef(DB_RIDES.".bikeID"),
               "=",
               new QueryIntLiteral($this->bikeID));
          $currentWhere = $this->_andOn($currentWhere, $newClause);

@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright(c) 2003 Nathan P Sharp
+Copyright(c) 2003-2004 Nathan P Sharp
 
 This file is part of Ride Dammit!.
 
@@ -19,13 +19,23 @@ along with Ride Dammit!; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+ //Point PHP at the correct strings file for the language and
+ //type of app you are setting up
+ include("RD/RDstrings.rides.en.php");
+ //Be sure to not end the base URL with a trailing slash
+ $RD_baseURL = "http://myip.org/rides";
+
  //Configure the connection to the database below.  Be sure to fill in
  //the hostname, username, and password used to access the database.
  //To avoid having a globally available variable, just modify the function
  //below
  $RD_dbName = "ridesDB";
- //Be sure to not end the base URL with a trailing slash
- $RD_baseURL = "http://myip.org/rides";
+
+ $RD_template = "rides";
+
+ //Database Base table name. Used so multiple sites can have the
+ //same database
+ define(DB_TABLEBASE, "rides");
 
  function DBconnect()
  {

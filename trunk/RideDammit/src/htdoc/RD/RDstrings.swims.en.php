@@ -1,6 +1,6 @@
 <?php
 /*
-Copyright(c) 2003-2004 Nathan P Sharp
+Copyright(c) 2004 Nathan P Sharp
 
 This file is part of Ride Dammit!.
 
@@ -19,26 +19,20 @@ along with Ride Dammit!; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require("RD/RDdbclasses.php");
+define(S_SITE_TITLE,       "Swim Dammit!");
+define(S_ENGLISH_UNITS,    "English");
+define(S_METRIC_UNITS,     "Metric");
+define(S_ENGLISH_DISTANCE, "yd");
+define(S_METRIC_DISTANCE,  "m");
+define(S_ENGLISH_VELOCITY, "yd/h");
+define(S_METRIC_VELOCITY,  "m/h");
+define(S_ENGLISH_TEMP,     "&deg;F");
+define(S_METRIC_TEMP,      "&deg;C");
+define(C_METRIC_TO_ENGLISH_DIST, 1.09361);
+define(C_ENGLISH_TO_METRIC_DIST, 0.9144);
+define(S_PERSON,           "Swimmer");
+define(S_PERSONS,          "Swimmers");
+define(S_EVENT,            "Swim");
+define(S_EVENTS,           "Swims");
 
-//Initialize Variables and queries.
-$getVars = $HTTP_GET_VARS;
-$start = (int)$getVars["start"];
-$num = (int)$getVars["num"];
-if ( ! $num ) $num = 10;
-$currentQuery = new RDquery($getVars);
-
-
-//HTML HEADER
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-<HEAD>
-<TITLE><?php echo S_SITE_TITLE; ?></TITLE>
-<link rel="stylesheet" href="<?php echo $RD_baseURL ?>/default.css">
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-</HEAD>
-<?php
-include("templates/$RD_template/showRides.php");
-?>
-</HTML>

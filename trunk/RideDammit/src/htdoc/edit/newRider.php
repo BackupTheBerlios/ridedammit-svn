@@ -66,16 +66,16 @@ if ( $HTTP_POST_VARS["submit"] )
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <title>Ride Dammit! New Rider </title>
+  <title><?php echo S_SITE_TITLE." New ".S_PERSON; ?></title>
   <link rel="stylesheet" href="<?php echo $RD_baseURL ?>/default.css">
   <meta http-equiv="content-type"
  content="text/html; charset=ISO-8859-1">
 </head>
 <body>
-<?php $pageTitle = "New Rider"; include("header.inc.html"); ?>
-<H1>Become a new rider</H1>
+<?php $pageTitle = "New ".S_PERSON; include("header.inc.html"); ?>
+<H1>Become a new <?php echo S_PERSON; ?></H1>
 <p>I welcome anyone that I know to use this site for logging your
-miles.  I threw it all together in evenings and so forth, so
+<?php echo S_EVENTS; ?>.  I threw it all together in evenings and so forth, so
 there are still some breakable stuff in here, be forewarned.
 Hope you enjoy it and let me know if you have any questions
 or suggestions!  If you don't know my middle name (which is
@@ -151,7 +151,7 @@ if ( $normMsg )
   </center>
   <p>
   <a href="../showRides.php<?php
-  echo encodeGet($getVars) ?>">Back to rides</a>
+  echo encodeGet($getVars) ?>">Back to <?php echo S_EVENTS; ?></a>
 <?php include("footer.inc.html"); ?>
 </body>
 </html>
