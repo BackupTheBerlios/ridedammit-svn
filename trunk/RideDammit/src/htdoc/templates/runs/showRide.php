@@ -28,7 +28,7 @@ if ( $msg )
 }
 ?>
 <center>
-<table class="tbLog" width="95%" cellspacing="2" cellpadding="2">
+<table class="tbLog" width="500px" cellspacing="2" cellpadding="2">
                 <tbody>
                    <tr>
                  <td class="tbLogHeader">Date</td>
@@ -62,7 +62,9 @@ if ( $msg )
                  <td class="tbLogHeader">Avg Speed</td>
                      <td class="tbLogBody"><?php
                         echo number_format($ride->c_avgSpeed,2)." ".
-                             $units->velocityString() ?></td>
+                             $units->velocityString() ?><br /><?php
+                        echo number_format(60.0/$ride->c_avgSpeed,2).
+                             " min/".$units->distanceString() ?></td>
                    </tr>
                    <tr>
                  <td class="tbLogHeader">Effort</td>

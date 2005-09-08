@@ -118,8 +118,7 @@ Show <?php echo S_EVENTS; ?> for:
  <TH class="tbLogHeader">Dist<br><?php
       echo $units->distanceString() ?></TH>
  <TH class="tbLogHeader">Time</TH>
- <TH class="tbLogHeader">Avg<br><?php
-      echo $units->velocityString() ?></TH>
+ <TH class="tbLogHeader">Pace<br>min</TH>
  <TH class="tbLogHeader">Effort</TH>
 </TR>
 <?php
@@ -163,7 +162,7 @@ Show <?php echo S_EVENTS; ?> for:
                number_format($rides->f_distance,2)."</TD>";
       echo "<TD class=\"tbLogBody\">$rides->f_time</TD>";
       echo "<TD class=\"tbLogBody\">".
-               number_format($rides->c_avgSpeed,2)."</TD>";
+               number_format(60.0/$rides->c_avgSpeed,2)."</TD>";
       echo "<TD class=\"tbLogBody\">$rides->f_effortLevel</TD>";
       echo "</TR>\n";
       echo "<TR>";
@@ -184,7 +183,7 @@ Show <?php echo S_EVENTS; ?> for:
             time_format($totalTime)."</TD>";
    $avgSpd = ($totalTime > 0)?($totalDist*3600/$totalTime):0;
    echo "<TD class=\"tbLogFoot\">".
-            number_format($avgSpd,2)."</TD>";
+            number_format(60.0/$avgSpd,2)."</TD>";
    echo "<TD class=\"tbLogFoot\">&nbsp;</TD>";
    echo "</TR>\n";
 ?>
@@ -223,6 +222,7 @@ if ( $currentQuery->getWhereStatement() )
    echo "(using query specified at page top)<br>";
 }
 ?>
+<!-- <p><a href="riderStats.php">View Graphs</a></p> -->
 <table class="tbLog" width="80%" border=0 cellpadding=3 cellSpacing=3>
  <tbody>
   <tr>
@@ -232,8 +232,8 @@ if ( $currentQuery->getWhereStatement() )
    <td class="tbLogHeader">Avg Dist<br><?php echo $units->distanceString() ?></td>
    <td class="tbLogHeader">Max Dist<br><?php echo $units->distanceString() ?></td>
    <td class="tbLogHeader">Time</td>
-   <td class="tbLogHeader">Avg<br><?php echo $units->velocityString() ?></td>
-        <td class="tbLogHeader">Best Avg<br><?php echo $units->velocityString() ?></td>
+   <td class="tbLogHeader">Pace<br>min</td>
+        <td class="tbLogHeader">Best Pace<br>min</td>
   </tr>
 <?php
 $riders = new RDrider(DBConnect(), $units);
@@ -264,9 +264,9 @@ while ( $riders->parseNextRow($results) )
    echo " <td class=\"tbLogBody\">".
          time_format($riders->c_totalTime)."</td>\n";
    echo " <td class=\"tbLogBody\">".
-         number_format($riders->c_avgSpeed,2)."</td>\n";
+         number_format(60.0/$riders->c_avgSpeed,2)."</td>\n";
    echo " <td class=\"tbLogBody\">".
-         number_format($riders->c_mAvgSpeed,2)."</td>\n";
+         number_format(60.0/$riders->c_mAvgSpeed,2)."</td>\n";
    echo "</tr>\n";
    echo "<tr>\n";
    $tdc = getDistanceClass($riders->c_totalDist);
@@ -299,16 +299,16 @@ if ( $riderCount > 1 )
          time_format($otime)."</td>\n";
    echo " <td class=\"tbLogBody\">".
          (($otime > 0 ) ?
-         number_format($odist/$otime*3600,2) :
+         number_format($otime/$odist/60,2) :
          "0.00").
          "</td>\n";
    echo " <td class=\"tbLogBody\">".
-                   number_format($omAvgSpeed,2)."</td>\n";
+                   number_format(60.0/$omAvgSpeed,2)."</td>\n";
    echo "</tr>\n";
    echo "<tr>\n";
    echo " <td class=\"tbLogBody2\" colspan=\"8\">";
    $tdc = getDistanceClass($odist);
-   echo "Together you've ridden ".$tdc->asOutput();
+   echo "Together you've run ".$tdc->asOutput();
    echo "</td></tr>\n";
 }
 
