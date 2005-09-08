@@ -28,7 +28,7 @@ if ( $msg )
 }
 ?>
 <center>
-<table class="tbLog" width="95%" cellspacing="2" cellpadding="2">
+<table class="tbLog" width="500px" cellspacing="2" cellpadding="2">
                 <tbody>
                    <tr>
                  <td class="tbLogHeader">Date</td>
