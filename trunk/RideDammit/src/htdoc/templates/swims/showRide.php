@@ -62,7 +62,9 @@ if ( $msg )
                  <td class="tbLogHeader">Avg Speed</td>
                      <td class="tbLogBody"><?php
                         echo number_format($ride->c_avgSpeed,2)." ".
-                             $units->velocityString() ?></td>
+                             $units->velocityString() ?><br /><?php
+                        echo number_format(60.0*50.0/$ride->c_avgSpeed,2).
+                             " min/50".$units->distanceString() ?></td>
                    </tr>
                    <tr>
                  <td class="tbLogHeader">Effort</td>
