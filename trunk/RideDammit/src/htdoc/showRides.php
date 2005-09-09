@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 require("RD/RDdbclasses.php");
 
 //Initialize Variables and queries.
-$getVars = $HTTP_GET_VARS;
+$getVars = $_GET;
 $start = (int)$getVars["start"];
 $num = (int)$getVars["num"];
 if ( ! $num ) $num = 10;

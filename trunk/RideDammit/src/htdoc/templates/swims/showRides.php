@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 sign up here to use this system</a>
 to keep track of your own <?php echo S_EVENTS; ?>.</p>
 Show <?php echo S_EVENTS; ?> for:
-<FORM METHOD="GET" ACTION="<?php echo $HTTP_SERVER_VARS["PHP_SELF"] ?>">
+<FORM METHOD="GET" ACTION="<?php echo $_SERVER["PHP_SELF"] ?>">
 <INPUT TYPE="HIDDEN" NAME="units" VALUE="<?php echo $units->unitsString() ?>">
 
 <?php

@@ -23,10 +23,10 @@ require("RD/config/RDbootstrap.php");
 require("RD/QueryAPI.php");
 require("RD/config/RDstrings.".$RD_strings.".php");
 
-define(DB_RIDES, DB_TABLEBASE."_rides");
-define(DB_RIDERS, DB_TABLEBASE."_riders");
-define(DB_LOCATIONS, DB_TABLEBASE."_locations");
-define(DB_BIKES, DB_TABLEBASE."_bikes");
+define("DB_RIDES", DB_TABLEBASE."_rides");
+define("DB_RIDERS", DB_TABLEBASE."_riders");
+define("DB_LOCATIONS", DB_TABLEBASE."_locations");
+define("DB_BIKES", DB_TABLEBASE."_bikes");
 
 //----------------------------------------------------------------------------
 // COMMONLY USED FUNCTIONS
@@ -519,9 +519,9 @@ class RDrider
 
    function parseRow($result)
    {
-      $this->f_riderID = $result[riderID];
-      $this->f_firstName = $result[firstName];
-      $this->f_lastName = $result[lastName];
+      $this->f_riderID = $result["riderID"];
+      $this->f_firstName = $result["firstName"];
+      $this->f_lastName = $result["lastName"];
       if ( isset($result["tTime"] ) )
       {
          $this->c_totalTime = $result["tTime"];
@@ -1080,8 +1080,8 @@ class RDride
 }
 
 
-define(UNIT_METRIC, 1);
-define(UNIT_ENGLISH, 3);
+define("UNIT_METRIC", 1);
+define("UNIT_ENGLISH", 3);
 
 /*************************************************
  * Class which represents the current units in
@@ -1306,7 +1306,7 @@ class RDquery
 //------------------------------------------------
 // Go ahead and create a units class with the current units per the
 // GET vars.
-$units = new RDunits($HTTP_GET_VARS[units]);
+$units = new RDunits($_GET["units"]);
 
 include("RD/RDdistances.php");
 
