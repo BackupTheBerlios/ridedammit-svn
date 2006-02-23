@@ -536,6 +536,17 @@ class RDrider
                         $this->c_mDist = $this->units->metricToSetting($result["mDist"]);
                         $this->c_aDist = $this->units->metricToSetting($result["aDist"]);
       }
+      else
+      {
+         $this->c_totalTime = 0;
+	 $this->c_totalDist = 0;
+	 $this->c_maxSpeed = 0;
+	 $this->c_avgSpeed = 0;
+	 $this->c_numRides = 0;
+	 $this->c_mAvgSpeed = 0;
+	 $this->c_mDist = 0;
+	 $this->c_aDist = 0;
+      }
    }
 }
 
