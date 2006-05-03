@@ -23,8 +23,10 @@ require("RD/RDdbclasses.php");
 
 //Initialize Variables and queries.
 $getVars = $_GET;
-$start = (int)$getVars["start"];
-$num = (int)$getVars["num"];
+if ( isset($getVars["start"] ))
+   $start = (int)$getVars["start"];
+if ( isset($getVars["num"] ))
+   $num = (int)$getVars["num"];
 if ( ! $num ) $num = 10;
 $currentQuery = new RDquery($getVars);
 

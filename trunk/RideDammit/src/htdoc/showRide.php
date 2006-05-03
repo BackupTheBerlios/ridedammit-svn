@@ -23,7 +23,7 @@ require("RD/RDdbclasses.php");
 $getVars = $HTTP_GET_VARS;
 
 $ride = new RDride(DBConnect(), $units);
-$msg = $ride->getDB_id((int)$getVars[rideID]);
+$msg = $ride->getDB_id((int)$getVars["rideID"]);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
