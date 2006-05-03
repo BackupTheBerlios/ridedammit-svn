@@ -43,13 +43,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
  //Database Base table name. Used so multiple sites can have the
  //same database
- define(DB_TABLEBASE, "rides");
+ define("DB_TABLEBASE", "rides");
 
  function DBconnect()
  {
   global $RD_connection;
   global $RD_dbName;
-  if ( ! $connection )
+  if ( !isset( $RD_connection )  )
   {
     $RD_connection = mysql_connect("localhost", "userID", "secretpassword")
                      or noDatabase("connect", mysql_error());
