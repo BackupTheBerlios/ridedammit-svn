@@ -17,6 +17,6 @@ SELECT rides_rides.riderID,
    date_format(date, "%b %y") as hmonth
 FROM `rides_rides` inner join rides_locations on rides_rides.locationID=rides_locations.locationID
   inner join rides_riders on rides_rides.riderID=rides_riders.riderID
-where date > date_sub(date_add(date_format(now(), "%Y-%m-01"), interval 1 month), interval 1 year)
+where date > date_sub(date_sub(date_format(now(), "%Y-%m-01"), interval 1 month), interval 1 year)
 group by month, riderID
 order by month

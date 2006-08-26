@@ -154,7 +154,7 @@ public class RDGraphGenerator {
     {
        DefaultCategoryDataset cd = new DefaultCategoryDataset();
        //Fill in initial months
-       for (int i = 0 ; i < 12 ; i ++ )
+       for (int i = 0 ; i < 14 ; i ++ )
        {
           int newMonth = firstMonth + i;
           int newYear = firstYear;
