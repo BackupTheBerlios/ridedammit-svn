@@ -34,7 +34,7 @@ if ( $normMsg )
 <p class="tinyPrint">You are entering data in <?php echo $units->unitsString() ?>
   units.
 </p>
-<form method="post" action="<?php
+<form id="editRide" method="post" action="<?php
    echo $HTTP_SERVER_VARS["PHP_SELF"].encodeGet($getVars) ?>">
 
   <table class="tbEdit" width="95%">
@@ -230,6 +230,13 @@ if ( $normMsg )
  name="temperature" value="<?php
          echo number_format($ride->f_temperature, 1)
          ?>" size="12" maxlen="15"><br>
+       <?php 
+	   if ( !isset($ride->f_temperature) )
+	   { 
+	      include_once("RD/RDweather.php");
+	      insertWeatherGrab("KPSK", $units);
+	   }
+       ?>
             </td>
             <td class="tbEditHeader" rowspan="3" colspan="1">Notes<br>
             </td>
